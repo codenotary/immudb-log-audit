@@ -1,0 +1,969 @@
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Linux version 5.10.102.1-microsoft-standard-WSL2 (oe-user@oe-host) (x86_64-msft-linux-gcc (GCC) 9.3.0, GNU ld (GNU Binutils) 2.34.0.20200220) #1 SMP Wed Mar 2 00:30:59 UTC 2022
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Command line: initrd=\initrd.img panic=-1 nr_cpus=16 swiotlb=force earlycon=uart8250,io,0x3f8,115200 console=hvc0 debug pty.legacy_count=0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] KERNEL supported cpus:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000]   Intel GenuineIntel
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000]   AMD AuthenticAMD
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000]   Centaur CentaurHauls
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'compacted' format.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-provided physical RAM map:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff] usable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-e820: [mem 0x00000000000e0000-0x00000000000e0fff] reserved
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000001fffff] ACPI data
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-e820: [mem 0x0000000000200000-0x00000000f7ffffff] usable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x0000000507ffffff] usable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] earlycon: uart8250 at I/O port 0x3f8 (options '115200')
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] printk: bootconsole [uart8250] enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] NX (Execute Disable) protection: active
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] DMI not present or invalid.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Hypervisor detected: Microsoft Hyper-V
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Hyper-V: privilege flags low 0xae7f, high 0x3b8030, hints 0xc2c, misc 0xe0bed7b2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Hyper-V Host Build:22621-10.0-0-0.963
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Hyper-V: LAPIC Timer Frequency: 0x1e8480
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] Hyper-V: Using hypercall for remote TLB flush
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000000] clocksource: hyperv_clocksource_tsc_page: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.000004] tsc: Detected 3193.926 MHz processor
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.001787] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.004756] e820: remove [mem 0x000a0000-0x000fffff] usable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.006778] last_pfn = 0x508000 max_arch_pfn = 0x400000000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.008715] MTRR default type: uncachable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.010100] MTRR fixed ranges enabled:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.011796]   00000-3FFFF write-back
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.013444]   40000-7FFFF uncachable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.015159]   80000-8FFFF write-back
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.016829]   90000-FFFFF uncachable
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.018508] MTRR variable ranges enabled:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.020351]   0 base 000000000000 mask FFFF00000000 write-back
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.022351]   1 base 000100000000 mask FFF000000000 write-back
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.024429]   2 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.025334]   3 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.026101]   4 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.026827]   5 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.027550]   6 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.028412]   7 disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.029155] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.031131] last_pfn = 0xf8000 max_arch_pfn = 0x400000000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.032689] Using GB pages for direct mapping
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.034440] RAMDISK: [mem 0x03835000-0x03844fff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.036103] ACPI: Early table checksum verification disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.038071] ACPI: RSDP 0x00000000000E0000 000024 (v02 VRTUAL)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.040078] ACPI: XSDT 0x0000000000100000 000044 (v01 VRTUAL MICROSFT 00000001 MSFT 00000001)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.043043] ACPI: FACP 0x0000000000101000 000114 (v06 VRTUAL MICROSFT 00000001 MSFT 00000001)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.046007] ACPI: DSDT 0x00000000001011B8 01E191 (v02 MSFTVM DSDT01   00000001 MSFT 05000000)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.048935] ACPI: FACS 0x0000000000101114 000040
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.050646] ACPI: OEM0 0x0000000000101154 000064 (v01 VRTUAL MICROSFT 00000001 MSFT 00000001)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.053670] ACPI: SRAT 0x000000000011F349 0003B0 (v02 VRTUAL MICROSFT 00000001 MSFT 00000001)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.056908] ACPI: APIC 0x000000000011F6F9 0000C8 (v04 VRTUAL MICROSFT 00000001 MSFT 00000001)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.060093] ACPI: Reserving FACP table memory at [mem 0x101000-0x101113]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.062068] ACPI: Reserving DSDT table memory at [mem 0x1011b8-0x11f348]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.064088] ACPI: Reserving FACS table memory at [mem 0x101114-0x101153]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.066239] ACPI: Reserving OEM0 table memory at [mem 0x101154-0x1011b7]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.068299] ACPI: Reserving SRAT table memory at [mem 0x11f349-0x11f6f8]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.070378] ACPI: Reserving APIC table memory at [mem 0x11f6f9-0x11f7c0]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.072611] ACPI: Local APIC address 0xfee00000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.074043] Zone ranges:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.074764]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.076553]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.078293]   Normal   [mem 0x0000000100000000-0x0000000507ffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.080104]   Device   empty
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.080923] Movable zone start for each node
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.082166] Early memory node ranges
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.083221]   node   0: [mem 0x0000000000001000-0x000000000009ffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.085021]   node   0: [mem 0x0000000000200000-0x00000000f7ffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.086786]   node   0: [mem 0x0000000100000000-0x0000000507ffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.088534] Initmem setup node 0 [mem 0x0000000000001000-0x0000000507ffffff]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.090505] On node 0 totalpages: 5242527
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.091618]   DMA zone: 59 pages used for memmap
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.093034]   DMA zone: 22 pages reserved
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.094341]   DMA zone: 3743 pages, LIFO batch:0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.095763]   DMA32 zone: 16320 pages used for memmap
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.097462]   DMA32 zone: 1011712 pages, LIFO batch:63
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.099145]   Normal zone: 66048 pages used for memmap
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.100843]   Normal zone: 4227072 pages, LIFO batch:63
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.102755] On node 0, zone DMA: 1 pages in unavailable ranges
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.102787] On node 0, zone DMA: 352 pages in unavailable ranges
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.118546] ACPI: Local APIC address 0xfee00000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.122626] ACPI: LAPIC_NMI (acpi_id[0x01] dfl dfl lint[0x1])
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.124577] IOAPIC[0]: apic_id 16, version 17, address 0xfec00000, GSI 0-23
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.127032] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.129668] ACPI: IRQ9 used by override.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.130912] Using ACPI (MADT) for SMP configuration information
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.133232] smpboot: Allowing 16 CPUs, 0 hotplug CPUs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.135274] [mem 0xf8000000-0xffffffff] available for PCI devices
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.137519] Booting paravirtualized kernel on Hyper-V
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.139274] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.147064] setup_percpu: NR_CPUS:256 nr_cpumask_bits:256 nr_cpu_ids:16 nr_node_ids:1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.149879] percpu: Embedded 56 pages/cpu s190040 r8192 d31144 u262144
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.151863] pcpu-alloc: s190040 r8192 d31144 u262144 alloc=1*2097152
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.153690] pcpu-alloc: [0] 00 01 02 03 04 05 06 07 [0] 08 09 10 11 12 13 14 15 
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.155906] Hyper-V: PV spinlocks enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.157058] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.159409] Built 1 zonelists, mobility grouping on.  Total pages: 5160078
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.162110] Kernel command line: initrd=\initrd.img panic=-1 nr_cpus=16 swiotlb=force earlycon=uart8250,io,0x3f8,115200 console=hvc0 debug pty.legacy_count=0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.172644] Dentry cache hash table entries: 4194304 (order: 13, 33554432 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.178379] Inode-cache hash table entries: 2097152 (order: 12, 16777216 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.181023] mem auto-init: stack:off, heap alloc:off, heap free:off
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.203941] Memory: 4085932K/20970108K available (16404K kernel code, 2544K rwdata, 9048K rodata, 1580K init, 2772K bss, 487564K reserved, 0K cma-reserved)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.209386] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=16, Nodes=1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.211955] ftrace: allocating 51665 entries in 202 pages
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.230122] ftrace: allocated 202 pages with 4 groups
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.232007] rcu: Hierarchical RCU implementation.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.233409] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=16.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.235483] 	Rude variant of Tasks RCU enabled.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.236818] 	Tracing variant of Tasks RCU enabled.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.238338] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.240754] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=16
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.245115] Using NULL legacy PIC
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.246178] NR_IRQS: 16640, nr_irqs: 552, preallocated irqs: 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.248285] random: crng done (trusting CPU's manufacturer)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.250112] Console: colour dummy device 80x25
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.251499] ACPI: Core revision 20200925
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.253035] Failed to register legacy timer interrupt
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.254749] APIC: Switch to symmetric I/O mode setup
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.256244] Switched APIC routing to physical flat.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.257837] Hyper-V: Using IPI hypercalls
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.259391] Hyper-V: Using enlightened APIC (xapic mode)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.259532] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x2e09dffc3c1, max_idle_ns: 440795305757 ns
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.266805] Calibrating delay loop (skipped), value calculated using timer frequency.. 6387.85 BogoMIPS (lpj=31939260)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.270977] pid_max: default: 32768 minimum: 301
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.272264] LSM: Security Framework initializing
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.273592] Mount-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.275840] Mountpoint-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] x86/cpu: User Mode Instruction Prevention (UMIP) activated
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Last level iTLB entries: 4KB 512, 2MB 512, 4MB 256
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Last level dTLB entries: 4KB 2048, 2MB 2048, 4MB 1024, 1GB 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V2 : Mitigation: Full AMD retpoline
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V2 : Enabling Restricted Speculation for firmware calls
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Spectre V2 : User space: Mitigation: STIBP via seccomp and prctl
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl and seccomp
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Freeing SMP alternatives memory: 56K
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] smpboot: CPU0: AMD Ryzen 7 5800H with Radeon Graphics (family: 0x19, model: 0x50, stepping: 0x0)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] Performance Events: PMU not available due to virtualization, using software events only.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] rcu: Hierarchical SRCU implementation.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] smp: Bringing up secondary CPUs ...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276800] x86: Booting SMP configuration:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.276812] .... node  #0, CPUs:        #1  #2  #3  #4  #5  #6  #7  #8  #9 #10 #11 #12 #13 #14 #15
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.277472] smp: Brought up 1 node, 16 CPUs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.288477] smpboot: Max logical packages: 1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.289865] smpboot: Total of 16 processors activated (102205.63 BogoMIPS)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.316834] node 0 deferred pages initialised in 30ms
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.317594] devtmpfs: initialized
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.318194] x86/mm: Memory block size: 128MB
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.320346] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.326836] futex hash table entries: 4096 (order: 6, 262144 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.329336] NET: Registered protocol family 16
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.330698] thermal_sys: Registered thermal governor 'step_wise'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.330728] cpuidle: using governor menu
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.330728] ACPI: bus type PCI registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.330728] PCI: Fatal: No config space access function found
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.331575] Kprobes globally optimized
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.336864] HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.339660] HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.346987] raid6: skip pq benchmark and using algorithm avx2x4
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.346987] raid6: using avx2x2 recovery algorithm
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.348614] ACPI: Added _OSI(Module Device)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.350317] ACPI: Added _OSI(Processor Device)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.352089] ACPI: Added _OSI(3.0 _SCP Extensions)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.353757] ACPI: Added _OSI(Processor Aggregator Device)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.355620] ACPI: Added _OSI(Linux-Dell-Video)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.356807] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.358499] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.364290] ACPI: 1 ACPI AML tables successfully acquired and loaded
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.367015] ACPI: Interpreter enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.368145] ACPI: (supports S0 S5)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.369127] ACPI: Using IOAPIC for interrupt routing
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.370665] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.373591] ACPI: Enabled 2 GPEs in block 00 to 0F
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.376315] iommu: Default domain type: Translated 
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.376879] SCSI subsystem initialized
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.378165] ACPI: bus type USB registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.379387] usbcore: registered new interface driver usbfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.381024] usbcore: registered new interface driver hub
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.382571] usbcore: registered new device driver usb
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.386891] hv_vmbus: Vmbus version:5.2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.388011] PCI: Using ACPI for IRQ routing
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.386891] hv_vmbus: Unknown GUID: c376c1c3-d276-48d2-90a9-c04748072c60
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.388011] PCI: System does not support PCI
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.396897] hv_vmbus: Unknown GUID: 6e382d18-3336-4f4b-acc4-2b7703d4df4a
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.408417] hv_vmbus: Unknown GUID: dde9cbc0-5060-4436-9448-ea1254a5d177
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.406865] clocksource: Switched to clocksource tsc-early
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.601819] VFS: Disk quotas dquot_6.6.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.603657] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.607352] FS-Cache: Loaded
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.608871] pnp: PnP ACPI init
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.610591] pnp 00:00: Plug and Play ACPI device, IDs PNP0501 (active)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.613956] pnp 00:01: Plug and Play ACPI device, IDs PNP0501 (active)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.616793] pnp 00:02: Plug and Play ACPI device, IDs PNP0b00 (active)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.619818] pnp: PnP ACPI: found 3 devices
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.625649] NET: Registered protocol family 2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.627941] IP idents hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.632159] tcp_listen_portaddr_hash hash table entries: 16384 (order: 6, 262144 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.636451] TCP established hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.639823] TCP bind hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.642767] TCP: Hash tables configured (established 262144 bind 65536)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.645723] UDP hash table entries: 16384 (order: 7, 524288 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.649056] UDP-Lite hash table entries: 16384 (order: 7, 524288 bytes, linear)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.652860] NET: Registered protocol family 1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.655426] RPC: Registered named UNIX socket transport module.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.658023] RPC: Registered udp transport module.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.659967] RPC: Registered tcp transport module.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.661888] RPC: Registered tcp NFSv4.1 backchannel transport module.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.664468] PCI: CLS 0 bytes, default 64
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.666146] Trying to unpack rootfs image as initramfs...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.668607] Freeing initrd memory: 64K
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.670166] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.672818] software IO TLB: mapped [mem 0x00000000f4000000-0x00000000f8000000] (64MB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.677636] kvm: no hardware support
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.680519] kvm: Nested Virtualization enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.682183] SVM: kvm: Nested Paging enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.683482] SVM: Virtual VMLOAD VMSAVE supported
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.688096] Initialise system trusted keyrings
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.689630] workingset: timestamp_bits=46 max_order=23 bucket_order=0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.692403] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.695296] NFS: Registering the id_resolver key type
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.697143] Key type id_resolver registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.698433] Key type id_legacy registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.699633] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.701652] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.703845] Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.706274] Key type cifs.idmap registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.708063] fuse: init (API version 7.32)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.709713] SGI XFS with ACLs, security attributes, realtime, scrub, repair, quota, no debug enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.712862] 9p: Installing v9fs 9p2000 file system support
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.714552] FS-Cache: Netfs '9p' registered for caching
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.716197] FS-Cache: Netfs 'ceph' registered for caching
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.717969] ceph: loaded (mds proto 32)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.722396] NET: Registered protocol family 38
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.723971] xor: automatically using best checksumming function   avx       
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.726795] Key type asymmetric registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.728498] Asymmetric key parser 'x509' registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.730786] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 250)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.734733] hv_vmbus: registering driver hv_pci
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.736562] hv_pci f1e61a4b-9c1f-4e52-84c8-33a02ff48c9c: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.741423] hv_pci f1e61a4b-9c1f-4e52-84c8-33a02ff48c9c: PCI host bridge to bus 9c1f:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.744820] pci_bus 9c1f:00: root bus resource [mem 0x9ffe00000-0x9ffe02fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.749404] pci 9c1f:00:00.0: [1af4:1043] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.753006] pci 9c1f:00:00.0: reg 0x10: [mem 0x9ffe00000-0x9ffe00fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.755977] pci 9c1f:00:00.0: reg 0x18: [mem 0x9ffe01000-0x9ffe01fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.759180] pci 9c1f:00:00.0: reg 0x20: [mem 0x9ffe02000-0x9ffe02fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.764853] pci 9c1f:00:00.0: BAR 0: assigned [mem 0x9ffe00000-0x9ffe00fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.768334] pci 9c1f:00:00.0: BAR 2: assigned [mem 0x9ffe01000-0x9ffe01fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.772384] pci 9c1f:00:00.0: BAR 4: assigned [mem 0x9ffe02000-0x9ffe02fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.777001] hv_pci 4f6d9568-2ab6-4d77-9e12-aa8e39c7eb5e: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.834770] hv_pci 4f6d9568-2ab6-4d77-9e12-aa8e39c7eb5e: PCI host bridge to bus 2ab6:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.838062] pci 2ab6:00:00.0: [1414:008e] type 00 class 0x030200
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.843666] ACPI: AC Adapter [AC1] (on-line)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.845764] battery: ACPI: Battery Slot [BAT1] (battery present)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.848611] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.850905] 00:00: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.853390] 00:01: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.891183] Non-volatile memory driver v1.3
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.893264] printk: console [hvc0] enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.894578] printk: bootconsole [uart8250] disabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.900006] brd: module loaded
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.901662] loop: module loaded
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.902096] hv_vmbus: registering driver hv_storvsc
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.903132] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.903719] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.904180] scsi host0: storvsc_host_t
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.904440] tun: Universal TUN/TAP device driver, 1.6
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.905342] PPP generic driver version 2.4.2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.905945] PPP BSD Compression module registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.906359] PPP Deflate Compression module registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.906671] PPP MPPE Compression module registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.907011] NET: Registered protocol family 24
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.907392] usbcore: registered new interface driver cdc_ether
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.907916] usbcore: registered new interface driver cdc_ncm
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.908385] hv_vmbus: registering driver hv_netvsc
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.908973] VFIO - User Level meta-driver version: 0.3
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.910042] usbcore: registered new interface driver cdc_acm
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.910435] cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.911108] usbcore: registered new interface driver ch341
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.911478] usbserial: USB Serial support registered for ch341-uart
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.911956] usbcore: registered new interface driver cp210x
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.912318] usbserial: USB Serial support registered for cp210x
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.912820] usbcore: registered new interface driver ftdi_sio
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.913264] usbserial: USB Serial support registered for FTDI USB Serial Device
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.914072] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.914754] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.915369] vhci_hcd: created sysfs vhci_hcd.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.915895] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 5.10
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.916470] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.917035] usb usb1: Product: USB/IP Virtual Host Controller
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.917489] usb usb1: Manufacturer: Linux 5.10.102.1-microsoft-standard-WSL2 vhci_hcd
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.918143] usb usb1: SerialNumber: vhci_hcd.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.918829] hub 1-0:1.0: USB hub found
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.919192] hub 1-0:1.0: 8 ports detected
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.919871] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.920457] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.921440] usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.922255] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 5.10
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.922832] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.923399] usb usb2: Product: USB/IP Virtual Host Controller
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.923827] usb usb2: Manufacturer: Linux 5.10.102.1-microsoft-standard-WSL2 vhci_hcd
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.924318] usb usb2: SerialNumber: vhci_hcd.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.924974] hub 2-0:1.0: USB hub found
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.925352] hub 2-0:1.0: 8 ports detected
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.926120] hv_vmbus: registering driver hyperv_keyboard
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.929177] rtc_cmos 00:02: RTC can wake from S4
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.931737] rtc_cmos 00:02: registered as rtc0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.932762] rtc_cmos 00:02: setting system clock to 2023-01-05T18:29:26 UTC (1672943366)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.933492] rtc_cmos 00:02: alarms up to one month, 114 bytes nvram
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.934551] device-mapper: ioctl: 4.43.0-ioctl (2020-10-01) initialised: dm-devel@redhat.com
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.935588] device-mapper: raid: Loading target version 1.15.1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.936383] usbcore: registered new interface driver usbhid
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.936759] usbhid: USB HID core driver
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.937282] hv_utils: Registering HyperV Utility Driver
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.937677] hv_vmbus: registering driver hv_utils
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.938106] hv_vmbus: registering driver hv_balloon
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.938110] hv_utils: cannot register PTP clock: 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.938523] hv_vmbus: registering driver dxgkrnl
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.939340] hv_utils: TimeSync IC version 4.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.939353] hv_balloon: Using Dynamic Memory protocol version 2.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.939753] (NULL device *): dxgk: dxg_drv_init  Version: 2216
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.941575] Free page reporting enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.942561] hv_balloon: Cold memory discard hint enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.943442] (NULL device *): dxgk: mmio allocated 9ffe10000  200000000 9ffe10000 bffe0ffff
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.945464] drop_monitor: Initializing network drop monitor service
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.946432] Mirror/redirect action on
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.947769] IPVS: Registered protocols (TCP, UDP)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.948514] IPVS: Connection hash table configured (size=4096, memory=64Kbytes)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.949512] IPVS: ipvs loaded.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.950072] IPVS: [rr] scheduler registered.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.950932] IPVS: [wrr] scheduler registered.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.951465] IPVS: [sh] scheduler registered.
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.952043] ipip: IPv4 and MPLS over IPv4 tunneling driver
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.955550] ipt_CLUSTERIP: ClusterIP Version 0.8 loaded successfully
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.956951] Initializing XFRM netlink socket
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.957649] NET: Registered protocol family 10
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.958830] Segment Routing with IPv6
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.960511] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.961173] NET: Registered protocol family 17
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.961586] Bridge firewalling registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.961902] 8021q: 802.1Q VLAN Support v1.8
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.962291] sctp: Hash tables configured (bind 512/512)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.962918] 9pnet: Installing 9P2000 support
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.963417] Key type dns_resolver registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.963885] Key type ceph registered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.964434] libceph: loaded (mon/osd proto 15/24)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.964928] NET: Registered protocol family 40
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.965346] hv_vmbus: registering driver hv_sock
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.965831] IPI shorthand broadcast: enabled
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.966239] sched_clock: Marking stable (946314543, 18596700)->(1023764800, -58853557)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.967154] registered taskstats version 1
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.967495] Loading compiled-in X.509 certificates
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.968140] Btrfs loaded, crc32c=crc32c-generic
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    0.969765] Freeing unused kernel image (initmem) memory: 1580K
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.026874] Write protecting the kernel read-only data: 28672k
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.028115] Freeing unused kernel image (text/rodata gap) memory: 2024K
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.028922] Freeing unused kernel image (rodata/data gap) memory: 1192K
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.029394] Run /init as init process
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.029602]   with arguments:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.029858]     /init
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.030069]   with environment:
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.030388]     HOME=/
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.030581]     TERM=linux
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.696869] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x2e09dffc3c1, max_idle_ns: 440795305757 ns
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.727837] clocksource: Switched to clocksource tsc
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.906883] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.957529] scsi 0:0:0:0: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.958576] sd 0:0:0:0: Attached scsi generic sg0 type 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.959236] sd 0:0:0:0: [sda] 536870912 512-byte logical blocks: (275 GB/256 GiB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.959694] sd 0:0:0:0: [sda] 4096-byte physical blocks
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.960107] sd 0:0:0:0: [sda] Write Protect is off
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.960446] sd 0:0:0:0: [sda] Mode Sense: 0f 00 00 00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    1.960942] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.041312] hv_pci e0f78b7b-59d5-494e-bfca-539fba409d39: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.043783] hv_pci e0f78b7b-59d5-494e-bfca-539fba409d39: PCI host bridge to bus 59d5:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.044284] pci_bus 59d5:00: root bus resource [mem 0xc00000000-0xe00001fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.045691] pci 59d5:00:00.0: [1af4:105a] type 00 class 0x088000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.048596] pci 59d5:00:00.0: reg 0x10: [mem 0xe00000000-0xe00000fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.051490] pci 59d5:00:00.0: reg 0x18: [mem 0xe00001000-0xe00001fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.053953] pci 59d5:00:00.0: reg 0x20: [mem 0xc00000000-0xdffffffff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.058817] pci 59d5:00:00.0: BAR 4: assigned [mem 0xc00000000-0xdffffffff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.061638] pci 59d5:00:00.0: BAR 0: assigned [mem 0xe00000000-0xe00000fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.064912] pci 59d5:00:00.0: BAR 2: assigned [mem 0xe00001000-0xe00001fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.084408] virtiofs virtio1: Cache len: 0x200000000 @ 0xc00000000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.150275] memmap_init_zone_device initialised 2097152 pages in 20ms
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.187222] sd 0:0:0:0: [sda] Attached SCSI disk
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    2.471592] EXT4-fs (sda): mounted filesystem with ordered data mode. Opts: (null)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.187009] scsi 0:0:0:1: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.187868] sd 0:0:0:1: Attached scsi generic sg1 type 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.188369] sd 0:0:0:1: [sdb] 701248 512-byte logical blocks: (359 MB/342 MiB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.188373] scsi 0:0:0:2: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.188795] sd 0:0:0:1: [sdb] Write Protect is on
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.189468] sd 0:0:0:1: [sdb] Mode Sense: 0f 00 80 00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.189560] sd 0:0:0:2: Attached scsi generic sg2 type 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.189882] sd 0:0:0:1: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.190134] sd 0:0:0:2: [sdc] 536870912 512-byte logical blocks: (275 GB/256 GiB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.191082] sd 0:0:0:2: [sdc] 4096-byte physical blocks
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.191525] sd 0:0:0:2: [sdc] Write Protect is off
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.191899] sd 0:0:0:2: [sdc] Mode Sense: 0f 00 00 00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.192449] sd 0:0:0:2: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.194419] sd 0:0:0:1: [sdb] Attached SCSI disk
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.194997] sd 0:0:0:2: [sdc] Attached SCSI disk
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.199220] EXT4-fs (sdb): mounted filesystem without journal. Opts: (null)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.236865] Adding 5242880k swap on /swap/file.  Priority:-2 extents:3 across:5259264k 
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.985748] EXT4-fs (sdc): recovery complete
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    3.989605] EXT4-fs (sdc): mounted filesystem with ordered data mode. Opts: discard,errors=remount-ro,data=ordered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.094072] hv_pci df9b4117-299b-47d7-a07a-6f9499f64c7d: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.095605] hv_pci df9b4117-299b-47d7-a07a-6f9499f64c7d: PCI host bridge to bus 299b:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.096119] pci_bus 299b:00: root bus resource [mem 0x9ffe04000-0x9ffe06fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.097917] pci 299b:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.099372] pci 299b:00:00.0: reg 0x10: [mem 0x9ffe04000-0x9ffe04fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.100828] pci 299b:00:00.0: reg 0x18: [mem 0x9ffe05000-0x9ffe05fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.101891] pci 299b:00:00.0: reg 0x20: [mem 0x9ffe06000-0x9ffe06fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.105466] pci 299b:00:00.0: BAR 0: assigned [mem 0x9ffe04000-0x9ffe04fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.106461] pci 299b:00:00.0: BAR 2: assigned [mem 0x9ffe05000-0x9ffe05fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.107352] pci 299b:00:00.0: BAR 4: assigned [mem 0x9ffe06000-0x9ffe06fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.126372] FS-Cache: Duplicate cookie detected
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.126822] FS-Cache: O-cookie c=000000001367dd39 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.127286] FS-Cache: O-cookie d=000000008f3b1ddf n=0000000001e32fe6
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.127611] FS-Cache: O-key=[10] '34323934393337363832'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.127941] FS-Cache: N-cookie c=00000000ff497f7e [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.128357] FS-Cache: N-cookie d=000000008f3b1ddf n=000000002be94f32
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.128662] FS-Cache: N-key=[10] '34323934393337363832'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.724332] hv_pci b55b9471-8679-412e-aeb9-66c9654b7fc7: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.725468] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.726028] WARNING: mount: waiting for virtio device...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.726048] hv_pci b55b9471-8679-412e-aeb9-66c9654b7fc7: PCI host bridge to bus 8679:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.727054] pci_bus 8679:00: root bus resource [mem 0x9ffe08000-0x9ffe0afff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.728622] pci 8679:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.729938] pci 8679:00:00.0: reg 0x10: [mem 0x9ffe08000-0x9ffe08fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.730914] pci 8679:00:00.0: reg 0x18: [mem 0x9ffe09000-0x9ffe09fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.731929] pci 8679:00:00.0: reg 0x20: [mem 0x9ffe0a000-0x9ffe0afff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.735649] pci 8679:00:00.0: BAR 0: assigned [mem 0x9ffe08000-0x9ffe08fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.737043] pci 8679:00:00.0: BAR 2: assigned [mem 0x9ffe09000-0x9ffe09fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.738211] pci 8679:00:00.0: BAR 4: assigned [mem 0x9ffe0a000-0x9ffe0afff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.833404] hv_pci eb814df0-20a7-40cc-86cc-658a72f2f0ab: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.835135] hv_pci eb814df0-20a7-40cc-86cc-658a72f2f0ab: PCI host bridge to bus 20a7:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.835789] pci_bus 20a7:00: root bus resource [mem 0x9ffe0c000-0x9ffe0efff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.837512] pci 20a7:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.839201] pci 20a7:00:00.0: reg 0x10: [mem 0x9ffe0c000-0x9ffe0cfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.840348] pci 20a7:00:00.0: reg 0x18: [mem 0x9ffe0d000-0x9ffe0dfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.841511] pci 20a7:00:00.0: reg 0x20: [mem 0x9ffe0e000-0x9ffe0efff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.845239] pci 20a7:00:00.0: BAR 0: assigned [mem 0x9ffe0c000-0x9ffe0cfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.846207] pci 20a7:00:00.0: BAR 2: assigned [mem 0x9ffe0d000-0x9ffe0dfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.847129] pci 20a7:00:00.0: BAR 4: assigned [mem 0x9ffe0e000-0x9ffe0efff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.870176] FS-Cache: Duplicate cookie detected
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.870615] FS-Cache: O-cookie c=000000005413b388 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.871131] FS-Cache: O-cookie d=000000008f3b1ddf n=000000009e972b6d
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.871476] FS-Cache: O-key=[10] '34323934393337373537'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.871803] FS-Cache: N-cookie c=0000000080dfbb14 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.872490] FS-Cache: N-cookie d=000000008f3b1ddf n=0000000015c52764
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    4.872967] FS-Cache: N-key=[10] '34323934393337373537'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.011995] hv_pci 80e3ad7b-e257-4baf-a6a9-3620a94c6560: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.013698] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.014162] WARNING: mount: waiting for virtio device...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.106666] hv_pci 80e3ad7b-e257-4baf-a6a9-3620a94c6560: PCI host bridge to bus e257:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.107413] pci_bus e257:00: root bus resource [mem 0xbffe10000-0xbffe12fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.109309] pci e257:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.111221] pci e257:00:00.0: reg 0x10: [mem 0xbffe10000-0xbffe10fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.112701] pci e257:00:00.0: reg 0x18: [mem 0xbffe11000-0xbffe11fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.114234] pci e257:00:00.0: reg 0x20: [mem 0xbffe12000-0xbffe12fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.114575] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.118860] pci e257:00:00.0: BAR 0: assigned [mem 0xbffe10000-0xbffe10fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.120110] pci e257:00:00.0: BAR 2: assigned [mem 0xbffe11000-0xbffe11fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.121454] pci e257:00:00.0: BAR 4: assigned [mem 0xbffe12000-0xbffe12fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.222997] hv_pci 4c1aad05-7f97-41db-b933-2e570aadc0d1: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.306414] hv_pci 4c1aad05-7f97-41db-b933-2e570aadc0d1: PCI host bridge to bus 7f97:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.307000] pci_bus 7f97:00: root bus resource [mem 0xbffe14000-0xbffe16fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.308239] pci 7f97:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.309564] pci 7f97:00:00.0: reg 0x10: [mem 0xbffe14000-0xbffe14fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.311063] pci 7f97:00:00.0: reg 0x18: [mem 0xbffe15000-0xbffe15fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.312559] pci 7f97:00:00.0: reg 0x20: [mem 0xbffe16000-0xbffe16fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.318511] pci 7f97:00:00.0: BAR 0: assigned [mem 0xbffe14000-0xbffe14fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.319841] pci 7f97:00:00.0: BAR 2: assigned [mem 0xbffe15000-0xbffe15fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [    5.320774] pci 7f97:00:00.0: BAR 4: assigned [mem 0xbffe16000-0xbffe16fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [   49.817057] hv_balloon: Max. dynamic memory size: 20480 MB
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [12838.798563] init: (1036) ERROR: InitCreateProcessUtilityVm:1743: write failed 32
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [12850.702846] hv_utils: TimeSync IC version 4.0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [12856.305007] init: (803) ERROR: InitCreateProcessUtilityVm:1743: write failed 32
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.735535] scsi 0:0:0:3: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.736840] scsi 0:0:0:3: Attached scsi generic sg3 type 0
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.737260] sd 0:0:0:3: [sdd] 536870912 512-byte logical blocks: (275 GB/256 GiB)
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.737743] sd 0:0:0:3: [sdd] 4096-byte physical blocks
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.738054] sd 0:0:0:3: [sdd] Write Protect is off
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.738346] sd 0:0:0:3: [sdd] Mode Sense: 0f 00 00 00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.738716] sd 0:0:0:3: [sdd] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.740743] sd 0:0:0:3: [sdd] Attached SCSI disk
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.766764] EXT4-fs (sdd): recovery complete
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.769355] EXT4-fs (sdd): mounted filesystem with ordered data mode. Opts: discard,errors=remount-ro,data=ordered
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.774295] FS-Cache: Duplicate cookie detected
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.774653] FS-Cache: O-cookie c=00000000780c7f68 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.775041] FS-Cache: O-cookie d=000000008f3b1ddf n=000000007c10cd3e
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.775397] FS-Cache: O-key=[10] '34323936363638383437'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.775630] FS-Cache: N-cookie c=000000009ff18701 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.775967] FS-Cache: N-cookie d=000000008f3b1ddf n=000000002d642b7b
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17315.776251] FS-Cache: N-key=[10] '34323936363638383437'
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.063441] hv_pci 5708b30d-cdf7-4ad4-8468-26c9385db563: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.065019] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.065422] WARNING: mount: waiting for virtio device...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.126717] hv_pci 5708b30d-cdf7-4ad4-8468-26c9385db563: PCI host bridge to bus cdf7:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.127330] pci_bus cdf7:00: root bus resource [mem 0xbffe18000-0xbffe1afff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.128670] pci cdf7:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.129985] pci cdf7:00:00.0: reg 0x10: [mem 0xbffe18000-0xbffe18fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.131045] pci cdf7:00:00.0: reg 0x18: [mem 0xbffe19000-0xbffe19fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.131896] pci cdf7:00:00.0: reg 0x20: [mem 0xbffe1a000-0xbffe1afff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.134691] pci cdf7:00:00.0: BAR 0: assigned [mem 0xbffe18000-0xbffe18fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.135434] pci cdf7:00:00.0: BAR 2: assigned [mem 0xbffe19000-0xbffe19fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.136108] pci cdf7:00:00.0: BAR 4: assigned [mem 0xbffe1a000-0xbffe1afff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.172160] hv_pci 3b426d36-1067-4a6c-88d6-2048d573d01d: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.233898] hv_pci 3b426d36-1067-4a6c-88d6-2048d573d01d: PCI host bridge to bus 1067:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.234341] pci_bus 1067:00: root bus resource [mem 0xbffe1c000-0xbffe1efff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.235436] pci 1067:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.236429] pci 1067:00:00.0: reg 0x10: [mem 0xbffe1c000-0xbffe1cfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.237216] pci 1067:00:00.0: reg 0x18: [mem 0xbffe1d000-0xbffe1dfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.237965] pci 1067:00:00.0: reg 0x20: [mem 0xbffe1e000-0xbffe1efff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.240822] pci 1067:00:00.0: BAR 0: assigned [mem 0xbffe1c000-0xbffe1cfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.241514] pci 1067:00:00.0: BAR 2: assigned [mem 0xbffe1d000-0xbffe1dfff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.242181] pci 1067:00:00.0: BAR 4: assigned [mem 0xbffe1e000-0xbffe1efff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.265495] init: (1) ERROR: ConfigApplyWindowsLibPath:2431: open /etc/ld.so.conf.d/ld.wsl.conf
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.265497]  failed 2
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.281113] hv_pci b3bdfac4-08dd-4238-8214-2e6312232e08: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.282591] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.283032] WARNING: mount: waiting for virtio device...
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.355656] hv_pci b3bdfac4-08dd-4238-8214-2e6312232e08: PCI host bridge to bus 08dd:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.356106] pci_bus 08dd:00: root bus resource [mem 0xbffe20000-0xbffe22fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.357131] pci 08dd:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.358166] pci 08dd:00:00.0: reg 0x10: [mem 0xbffe20000-0xbffe20fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.358967] pci 08dd:00:00.0: reg 0x18: [mem 0xbffe21000-0xbffe21fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.359772] pci 08dd:00:00.0: reg 0x20: [mem 0xbffe22000-0xbffe22fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.362658] pci 08dd:00:00.0: BAR 0: assigned [mem 0xbffe20000-0xbffe20fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.363379] pci 08dd:00:00.0: BAR 2: assigned [mem 0xbffe21000-0xbffe21fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.364126] pci 08dd:00:00.0: BAR 4: assigned [mem 0xbffe22000-0xbffe22fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.383405] 9pnet_virtio: no channels available for device drvfs
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.490082] hv_pci 87527c30-44b1-4c55-a3b9-a88fe4957b6a: PCI VMBus probing: Using version 0x10003
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.505264] WARNING: /usr/share/zoneinfo/Europe/Warsaw not found. Is the tzdata package installed?
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.556506] hv_pci 87527c30-44b1-4c55-a3b9-a88fe4957b6a: PCI host bridge to bus 44b1:00
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.557044] pci_bus 44b1:00: root bus resource [mem 0xbffe24000-0xbffe26fff window]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.558303] pci 44b1:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.559619] pci 44b1:00:00.0: reg 0x10: [mem 0xbffe24000-0xbffe24fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.560622] pci 44b1:00:00.0: reg 0x18: [mem 0xbffe25000-0xbffe25fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.561588] pci 44b1:00:00.0: reg 0x20: [mem 0xbffe26000-0xbffe26fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.564987] pci 44b1:00:00.0: BAR 0: assigned [mem 0xbffe24000-0xbffe24fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.565914] pci 44b1:00:00.0: BAR 2: assigned [mem 0xbffe25000-0xbffe25fff 64bit]
+Jan  6 13:57:19 DESKTOP-BLRRBQO kernel: [17316.566747] pci 44b1:00:00.0: BAR 4: assigned [mem 0xbffe26000-0xbffe26fff 64bit]
+Jan  6 13:57:20 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 13:57:20 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 13:57:20 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="29541" x-info="https://www.rsyslog.com"] start
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="30014" x-info="https://www.rsyslog.com"] start
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:01:44 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:14 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="30064" x-info="https://www.rsyslog.com"] start
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:01:50 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:01:20 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:12468: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="30203" x-info="https://www.rsyslog.com"] start
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:02:55 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:02:25 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="31528" x-info="https://www.rsyslog.com"] start
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:17:04 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:34 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="31578" x-info="https://www.rsyslog.com"] start
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:17:09 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:16:39 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="31787" x-info="https://www.rsyslog.com"] start
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), next retry is Fri Jan  6 14:19:03 2023, retry nbr 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 1. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 14:18:33 DESKTOP-BLRRBQO rsyslogd: cannot connect to 192.168.188.52:514: Connection refused [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 14:24:23 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 14:24:24 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:24:24 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:24:24 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="32351" x-info="https://www.rsyslog.com"] start
+Jan  6 14:32:09 DESKTOP-BLRRBQO tomek: user logged in
+Jan  6 14:33:33 DESKTOP-BLRRBQO tomek: user logged in
+Jan  6 14:38:21 DESKTOP-BLRRBQO -bash[305]: Hello world
+Jan  6 14:39:36 DESKTOP-BLRRBQO -bash[305]: message repeated 4 times: [ Hello world]
+Jan  6 14:44:52 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:44:52 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:44:52 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="2622" x-info="https://www.rsyslog.com"] start
+Jan  6 14:45:34 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:45:34 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:45:34 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="2726" x-info="https://www.rsyslog.com"] start
+Jan  6 14:46:43 DESKTOP-BLRRBQO rsyslogd: rsyslogd's groupid changed to 110
+Jan  6 14:46:43 DESKTOP-BLRRBQO rsyslogd: rsyslogd's userid changed to 104
+Jan  6 14:46:43 DESKTOP-BLRRBQO rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="2872" x-info="https://www.rsyslog.com"] start
+Jan  6 16:32:52 DESKTOP-BLRRBQO kernel: [40581.647667] init: (13254) ERROR: InitCreateProcessUtilityVm:1743: write failed 32
+Jan  6 16:32:52 DESKTOP-BLRRBQO rsyslogd: omfwd: TCPSendBuf error -2027, destruct TCP Connection to 192.168.188.52:514 [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 16:32:52 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 16:32:52 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.340585] EXT4-fs (sdd): mounted filesystem with ordered data mode. Opts: discard,errors=remount-ro,data=ordered
+Jan  6 18:24:07 DESKTOP-BLRRBQO rsyslogd: omfwd: TCPSendBuf error -2027, destruct TCP Connection to 192.168.188.52:514 [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 18:24:07 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 18:24:07 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.357861] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.358274] FS-Cache: O-cookie c=000000004b0d1900 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.358736] FS-Cache: O-cookie d=000000008f3b1ddf n=00000000b2faf773
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.359066] FS-Cache: O-key=[10] '34323939363632393036'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.359354] FS-Cache: N-cookie c=00000000bf6171e8 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.359798] FS-Cache: N-cookie d=000000008f3b1ddf n=000000005eb63006
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.360240] FS-Cache: N-key=[10] '34323939363632393036'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.779230] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.779761] FS-Cache: O-cookie c=00000000bf6171e8 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.780303] FS-Cache: O-cookie d=000000008f3b1ddf n=0000000025f50899
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.780694] FS-Cache: O-key=[10] '34323939363632393438'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.780986] FS-Cache: N-cookie c=00000000dd38c14e [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.781450] FS-Cache: N-cookie d=000000008f3b1ddf n=00000000cd3bb915
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.781848] FS-Cache: N-key=[10] '34323939363632393438'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.812916] init: (1) ERROR: ConfigApplyWindowsLibPath:2431: open /etc/ld.so.conf.d/ld.wsl.conf
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.812920]  failed 2
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.839530] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.840148] FS-Cache: O-cookie c=00000000b672459d [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.841210] FS-Cache: O-cookie d=000000008f3b1ddf n=00000000e643efde
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.845690] FS-Cache: O-key=[10] '34323939363632393534'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.849689] FS-Cache: N-cookie c=000000002c1e66f0 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.851080] FS-Cache: N-cookie d=000000008f3b1ddf n=000000001e4f42fd
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.852094] FS-Cache: N-key=[10] '34323939363632393534'
+Jan  6 18:24:07 DESKTOP-BLRRBQO kernel: [47256.863639] WARNING: /usr/share/zoneinfo/Europe/Warsaw not found. Is the tzdata package installed?
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.081833] EXT4-fs (sdd): mounted filesystem with ordered data mode. Opts: discard,errors=remount-ro,data=ordered
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.087743] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.088349] FS-Cache: O-cookie c=00000000fc8e4523 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.088923] FS-Cache: O-cookie d=000000008f3b1ddf n=000000004ae49a67
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.089395] FS-Cache: O-key=[10] '34323939363632393739'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.089684] FS-Cache: N-cookie c=000000003d91e1ff [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.090050] FS-Cache: N-cookie d=000000008f3b1ddf n=000000001996b318
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.090368] FS-Cache: N-key=[10] '34323939363632393739'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.221719] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.222216] FS-Cache: O-cookie c=000000003d91e1ff [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.222787] FS-Cache: O-cookie d=000000008f3b1ddf n=000000003dba192c
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.223216] FS-Cache: O-key=[10] '34323939363632393932'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.223537] FS-Cache: N-cookie c=00000000c492b0dc [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.223992] FS-Cache: N-cookie d=000000008f3b1ddf n=00000000b5f08cd9
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.224418] FS-Cache: N-key=[10] '34323939363632393932'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.235718] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.236177] FS-Cache: O-cookie c=000000002c1e66f0 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.236699] FS-Cache: O-cookie d=000000008f3b1ddf n=00000000a38c7439
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.237223] FS-Cache: O-key=[10] '34323939363632393934'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.237546] FS-Cache: N-cookie c=00000000a5524b42 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.238054] FS-Cache: N-cookie d=000000008f3b1ddf n=000000005e944f50
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.238435] FS-Cache: N-key=[10] '34323939363632393934'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.239347] init: (1) ERROR: ConfigApplyWindowsLibPath:2431: open /etc/ld.so.conf.d/ld.wsl.conf
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.239349]  failed 2
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.255319] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.255789] FS-Cache: O-cookie c=00000000a5524b42 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.256253] FS-Cache: O-cookie d=000000008f3b1ddf n=0000000073528d0b
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.256599] FS-Cache: O-key=[10] '34323939363632393936'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.256882] FS-Cache: N-cookie c=00000000b472baa7 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.257296] FS-Cache: N-cookie d=000000008f3b1ddf n=0000000050400db1
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.257636] FS-Cache: N-key=[10] '34323939363632393936'
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.263494] WARNING: /usr/share/zoneinfo/Europe/Warsaw not found. Is the tzdata package installed?
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.504599] scsi 0:0:0:4: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.505749] sd 0:0:0:4: Attached scsi generic sg4 type 0
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.506404] sd 0:0:0:4: [sde] 536870912 512-byte logical blocks: (275 GB/256 GiB)
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.507020] sd 0:0:0:4: [sde] 4096-byte physical blocks
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.507504] sd 0:0:0:4: [sde] Write Protect is off
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.507860] sd 0:0:0:4: [sde] Mode Sense: 0f 00 00 00
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.508390] sd 0:0:0:4: [sde] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jan  6 18:24:08 DESKTOP-BLRRBQO kernel: [47257.511460] sd 0:0:0:4: [sde] Attached SCSI disk
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.612439] EXT4-fs (sde): recovery complete
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.771576] EXT4-fs (sde): mounted filesystem with ordered data mode. Opts: discard,errors=remount-ro,data=ordered
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.776723] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.777081] FS-Cache: O-cookie c=000000002bb9e0b8 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.777413] FS-Cache: O-cookie d=000000008f3b1ddf n=00000000ce9e8221
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.777681] FS-Cache: O-key=[10] '34323939363633333438'
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.777881] FS-Cache: N-cookie c=0000000034e7215b [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.778191] FS-Cache: N-cookie d=000000008f3b1ddf n=0000000070f27bc1
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.778446] FS-Cache: N-key=[10] '34323939363633333438'
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.923714] hv_pci fde13933-9568-4f95-b0ca-2a7db8299381: PCI VMBus probing: Using version 0x10003
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.925193] 9pnet_virtio: no channels available for device drvfs
+Jan  6 18:24:11 DESKTOP-BLRRBQO kernel: [47260.925640] WARNING: mount: waiting for virtio device...
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.976331] hv_pci fde13933-9568-4f95-b0ca-2a7db8299381: PCI host bridge to bus 9568:00
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.976805] pci_bus 9568:00: root bus resource [mem 0xbffe28000-0xbffe2afff window]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.978367] pci 9568:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.980055] pci 9568:00:00.0: reg 0x10: [mem 0xbffe28000-0xbffe28fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.981309] pci 9568:00:00.0: reg 0x18: [mem 0xbffe29000-0xbffe29fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.982605] pci 9568:00:00.0: reg 0x20: [mem 0xbffe2a000-0xbffe2afff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.986539] pci 9568:00:00.0: BAR 0: assigned [mem 0xbffe28000-0xbffe28fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.987433] pci 9568:00:00.0: BAR 2: assigned [mem 0xbffe29000-0xbffe29fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47260.988283] pci 9568:00:00.0: BAR 4: assigned [mem 0xbffe2a000-0xbffe2afff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.032304] hv_pci 0d442873-e777-4875-b475-2cd26418ad23: PCI VMBus probing: Using version 0x10003
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.083765] hv_pci 0d442873-e777-4875-b475-2cd26418ad23: PCI host bridge to bus e777:00
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.084184] pci_bus e777:00: root bus resource [mem 0xbffe2c000-0xbffe2efff window]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.085265] pci e777:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.086343] pci e777:00:00.0: reg 0x10: [mem 0xbffe2c000-0xbffe2cfff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.087210] pci e777:00:00.0: reg 0x18: [mem 0xbffe2d000-0xbffe2dfff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.088035] pci e777:00:00.0: reg 0x20: [mem 0xbffe2e000-0xbffe2efff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.091063] pci e777:00:00.0: BAR 0: assigned [mem 0xbffe2c000-0xbffe2cfff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.091795] pci e777:00:00.0: BAR 2: assigned [mem 0xbffe2d000-0xbffe2dfff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.092709] pci e777:00:00.0: BAR 4: assigned [mem 0xbffe2e000-0xbffe2efff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.136490] FS-Cache: Duplicate cookie detected
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.136940] FS-Cache: O-cookie c=0000000011928b48 [p=00000000a632087c fl=222 nc=0 na=1]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.137475] FS-Cache: O-cookie d=000000008f3b1ddf n=00000000122cd5ea
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.137913] FS-Cache: O-key=[10] '34323939363633333834'
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.138217] FS-Cache: N-cookie c=00000000f9f01389 [p=00000000a632087c fl=2 nc=0 na=1]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.138579] FS-Cache: N-cookie d=000000008f3b1ddf n=000000009ae56361
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.138923] FS-Cache: N-key=[10] '34323939363633333834'
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.139472] init: (1) ERROR: ConfigApplyWindowsLibPath:2431: open /etc/ld.so.conf.d/ld.wsl.conf
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.139473]  failed 2
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.141970] init: (2) ERROR: UtilCreateProcessAndWait:702: /bin/mount failed with 2
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.142525] init: (1) ERROR: UtilCreateProcessAndWait:722: /bin/mount failed with status 0x
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.142527] ff00
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.143041] init: (1) ERROR: ConfigMountFsTab:2484: Processing fstab with mount -a failed.
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.149794] hv_pci 6fa4b071-db41-44df-9e1d-ce7797b0de67: PCI VMBus probing: Using version 0x10003
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.151191] 9pnet_virtio: no channels available for device drvfs
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.151515] WARNING: mount: waiting for virtio device...
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.201665] hv_pci 6fa4b071-db41-44df-9e1d-ce7797b0de67: PCI host bridge to bus db41:00
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.202178] pci_bus db41:00: root bus resource [mem 0xbffe30000-0xbffe32fff window]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.203413] pci db41:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.204446] pci db41:00:00.0: reg 0x10: [mem 0xbffe30000-0xbffe30fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.205366] pci db41:00:00.0: reg 0x18: [mem 0xbffe31000-0xbffe31fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.206175] pci db41:00:00.0: reg 0x20: [mem 0xbffe32000-0xbffe32fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.209224] pci db41:00:00.0: BAR 0: assigned [mem 0xbffe30000-0xbffe30fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.210165] pci db41:00:00.0: BAR 2: assigned [mem 0xbffe31000-0xbffe31fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.211129] pci db41:00:00.0: BAR 4: assigned [mem 0xbffe32000-0xbffe32fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.257231] hv_pci e8b1e8f1-65ab-457f-a09b-dd74b97f48c1: PCI VMBus probing: Using version 0x10003
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.272374] WARNING: /usr/share/zoneinfo/Europe/Warsaw not found. Is the tzdata package installed?
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.310064] hv_pci e8b1e8f1-65ab-457f-a09b-dd74b97f48c1: PCI host bridge to bus 65ab:00
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.310574] pci_bus 65ab:00: root bus resource [mem 0xbffe34000-0xbffe36fff window]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.311571] pci 65ab:00:00.0: [1af4:1049] type 00 class 0x010000
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.312677] pci 65ab:00:00.0: reg 0x10: [mem 0xbffe34000-0xbffe34fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.313512] pci 65ab:00:00.0: reg 0x18: [mem 0xbffe35000-0xbffe35fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.314322] pci 65ab:00:00.0: reg 0x20: [mem 0xbffe36000-0xbffe36fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.318835] pci 65ab:00:00.0: BAR 0: assigned [mem 0xbffe34000-0xbffe34fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.319943] pci 65ab:00:00.0: BAR 2: assigned [mem 0xbffe35000-0xbffe35fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.320969] pci 65ab:00:00.0: BAR 4: assigned [mem 0xbffe36000-0xbffe36fff 64bit]
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.343673] init: (8) ERROR: CreateProcessEntryCommon:443: getpwuid(0) failed 2
+Jan  6 18:24:12 DESKTOP-BLRRBQO kernel: [47261.344389] init: (8) ERROR: CreateProcessEntryCommon:446: getpwuid(0) failed 2
+Jan  6 18:24:14 DESKTOP-BLRRBQO kernel: [47263.664882] ISO 9660 Extensions: Microsoft Joliet Level 3
+Jan  6 18:24:14 DESKTOP-BLRRBQO kernel: [47263.665518] ISO 9660 Extensions: RRIP_1991A
+Jan  6 18:24:15 DESKTOP-BLRRBQO kernel: [47264.234443] ISO 9660 Extensions: Microsoft Joliet Level 3
+Jan  6 18:24:15 DESKTOP-BLRRBQO kernel: [47264.235041] ISO 9660 Extensions: RRIP_1991A
+Jan  6 18:24:15 DESKTOP-BLRRBQO kernel: [47264.384388] cgroup: cgroup: disabling cgroup2 socket matching due to net_prio or net_cls activation
+Jan  6 18:24:15 DESKTOP-BLRRBQO kernel: [47264.612851] IPv6: ADDRCONF(NETDEV_CHANGE): services1: link becomes ready
+Jan  6 18:24:15 DESKTOP-BLRRBQO kernel: [47264.613371] IPv6: ADDRCONF(NETDEV_CHANGE): services0: link becomes ready
+Jan  6 18:24:16 DESKTOP-BLRRBQO kernel: [47264.983306] cgroup: runc (17288) created nested cgroup for controller "memory" which has incomplete hierarchy support. Nested cgroups may change behavior in the future.
+Jan  6 18:24:16 DESKTOP-BLRRBQO kernel: [47264.983994] cgroup: "memory" requires setting use_hierarchy to 1 on the root
+Jan  6 18:24:16 DESKTOP-BLRRBQO rpc.statd[908]: Version 1.3.3 starting
+Jan  6 18:24:16 DESKTOP-BLRRBQO sm-notify[909]: Version 1.3.3 starting
+Jan  6 18:24:16 DESKTOP-BLRRBQO sm-notify[909]: Failed to open directory sm.bak: No such file or directory
+Jan  6 18:24:16 DESKTOP-BLRRBQO rpc.statd[908]: Running as root.  chown /var/lib/nfs to choose different user
+Jan  6 18:39:53 DESKTOP-BLRRBQO kernel: [48202.888178] docker0: port 1(veth9bff08b) entered blocking state
+Jan  6 18:39:53 DESKTOP-BLRRBQO kernel: [48202.888728] docker0: port 1(veth9bff08b) entered disabled state
+Jan  6 18:39:53 DESKTOP-BLRRBQO kernel: [48202.889125] device veth9bff08b entered promiscuous mode
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.132483] eth0: renamed from veth7be7d6d
+Jan  6 18:39:54 DESKTOP-BLRRBQO rsyslogd: omfwd: TCPSendBuf error -2027, destruct TCP Connection to 192.168.188.52:514 [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 18:39:54 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 18:39:54 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.172460] IPv6: ADDRCONF(NETDEV_CHANGE): veth9bff08b: link becomes ready
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.172988] docker0: port 1(veth9bff08b) entered blocking state
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.173310] docker0: port 1(veth9bff08b) entered forwarding state
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.173708] IPv6: ADDRCONF(NETDEV_CHANGE): docker0: link becomes ready
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.222268] docker0: port 1(veth9bff08b) entered disabled state
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.222746] veth7be7d6d: renamed from eth0
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.392096] docker0: port 1(veth9bff08b) entered disabled state
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.392786] device veth9bff08b left promiscuous mode
+Jan  6 18:39:54 DESKTOP-BLRRBQO kernel: [48203.393116] docker0: port 1(veth9bff08b) entered disabled state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.565480] docker0: port 1(veth6722249) entered blocking state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.566058] docker0: port 1(veth6722249) entered disabled state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.566382] device veth6722249 entered promiscuous mode
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.802495] eth0: renamed from vethc5a3d0a
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.862426] IPv6: ADDRCONF(NETDEV_CHANGE): veth6722249: link becomes ready
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.862942] docker0: port 1(veth6722249) entered blocking state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.863445] docker0: port 1(veth6722249) entered forwarding state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.903346] docker0: port 1(veth6722249) entered disabled state
+Jan  6 18:40:45 DESKTOP-BLRRBQO kernel: [48254.903885] vethc5a3d0a: renamed from eth0
+Jan  6 18:40:46 DESKTOP-BLRRBQO kernel: [48255.072088] docker0: port 1(veth6722249) entered disabled state
+Jan  6 18:40:46 DESKTOP-BLRRBQO kernel: [48255.072706] device veth6722249 left promiscuous mode
+Jan  6 18:40:46 DESKTOP-BLRRBQO kernel: [48255.073031] docker0: port 1(veth6722249) entered disabled state
+Jan  6 18:42:14 DESKTOP-BLRRBQO kernel: [48343.904258] docker0: port 1(veth48f1e1f) entered blocking state
+Jan  6 18:42:14 DESKTOP-BLRRBQO kernel: [48343.904655] docker0: port 1(veth48f1e1f) entered disabled state
+Jan  6 18:42:14 DESKTOP-BLRRBQO kernel: [48343.904965] device veth48f1e1f entered promiscuous mode
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.092480] eth0: renamed from vetha6c0aec
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.132371] IPv6: ADDRCONF(NETDEV_CHANGE): veth48f1e1f: link becomes ready
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.133046] docker0: port 1(veth48f1e1f) entered blocking state
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.133619] docker0: port 1(veth48f1e1f) entered forwarding state
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.172632] docker0: port 1(veth48f1e1f) entered disabled state
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.173057] vetha6c0aec: renamed from eth0
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.342054] docker0: port 1(veth48f1e1f) entered disabled state
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.342684] device veth48f1e1f left promiscuous mode
+Jan  6 18:42:15 DESKTOP-BLRRBQO kernel: [48344.342960] docker0: port 1(veth48f1e1f) entered disabled state
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.399098] docker0: port 1(vethb541d3a) entered blocking state
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.399791] docker0: port 1(vethb541d3a) entered disabled state
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.400306] device vethb541d3a entered promiscuous mode
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.772284] eth0: renamed from vethf3feaa3
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.872317] IPv6: ADDRCONF(NETDEV_CHANGE): vethb541d3a: link becomes ready
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.872923] docker0: port 1(vethb541d3a) entered blocking state
+Jan  6 19:14:17 DESKTOP-BLRRBQO kernel: [50266.873400] docker0: port 1(vethb541d3a) entered forwarding state
+Jan  6 19:14:18 DESKTOP-BLRRBQO kernel: [50267.116555] docker0: port 1(vethb541d3a) entered disabled state
+Jan  6 19:14:18 DESKTOP-BLRRBQO kernel: [50267.117223] vethf3feaa3: renamed from eth0
+Jan  6 19:14:18 DESKTOP-BLRRBQO kernel: [50267.302023] docker0: port 1(vethb541d3a) entered disabled state
+Jan  6 19:14:18 DESKTOP-BLRRBQO kernel: [50267.302770] device vethb541d3a left promiscuous mode
+Jan  6 19:14:18 DESKTOP-BLRRBQO kernel: [50267.303081] docker0: port 1(vethb541d3a) entered disabled state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.221174] docker0: port 1(vethe4ae9b5) entered blocking state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.222027] docker0: port 1(vethe4ae9b5) entered disabled state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.222624] device vethe4ae9b5 entered promiscuous mode
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.223074] docker0: port 1(vethe4ae9b5) entered blocking state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.223607] docker0: port 1(vethe4ae9b5) entered forwarding state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.224273] docker0: port 1(vethe4ae9b5) entered disabled state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.602350] eth0: renamed from veth2a74902
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.662207] IPv6: ADDRCONF(NETDEV_CHANGE): vethe4ae9b5: link becomes ready
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.662820] docker0: port 1(vethe4ae9b5) entered blocking state
+Jan  6 19:16:30 DESKTOP-BLRRBQO kernel: [50399.663216] docker0: port 1(vethe4ae9b5) entered forwarding state
+Jan  6 19:18:11 DESKTOP-BLRRBQO kernel: [50500.374407] docker0: port 1(vethe4ae9b5) entered disabled state
+Jan  6 19:18:11 DESKTOP-BLRRBQO kernel: [50500.375176] veth2a74902: renamed from eth0
+Jan  6 19:18:11 DESKTOP-BLRRBQO kernel: [50500.522538] docker0: port 1(vethe4ae9b5) entered disabled state
+Jan  6 19:18:11 DESKTOP-BLRRBQO kernel: [50500.523263] device vethe4ae9b5 left promiscuous mode
+Jan  6 19:18:11 DESKTOP-BLRRBQO kernel: [50500.523570] docker0: port 1(vethe4ae9b5) entered disabled state
+Jan  6 19:18:16 DESKTOP-BLRRBQO kernel: [50505.867385] docker0: port 1(veth8e0da9b) entered blocking state
+Jan  6 19:18:16 DESKTOP-BLRRBQO kernel: [50505.868226] docker0: port 1(veth8e0da9b) entered disabled state
+Jan  6 19:18:16 DESKTOP-BLRRBQO kernel: [50505.868888] device veth8e0da9b entered promiscuous mode
+Jan  6 19:18:17 DESKTOP-BLRRBQO kernel: [50506.172266] eth0: renamed from vethe997ae7
+Jan  6 19:18:17 DESKTOP-BLRRBQO kernel: [50506.232202] IPv6: ADDRCONF(NETDEV_CHANGE): veth8e0da9b: link becomes ready
+Jan  6 19:18:17 DESKTOP-BLRRBQO kernel: [50506.232708] docker0: port 1(veth8e0da9b) entered blocking state
+Jan  6 19:18:17 DESKTOP-BLRRBQO kernel: [50506.233147] docker0: port 1(veth8e0da9b) entered forwarding state
+Jan  6 19:23:37 DESKTOP-BLRRBQO kernel: [50826.857605] vethe997ae7: renamed from eth0
+Jan  6 19:23:37 DESKTOP-BLRRBQO kernel: [50826.922286] docker0: port 1(veth8e0da9b) entered disabled state
+Jan  6 19:23:38 DESKTOP-BLRRBQO kernel: [50827.011663] docker0: port 1(veth8e0da9b) entered disabled state
+Jan  6 19:23:38 DESKTOP-BLRRBQO kernel: [50827.012491] device veth8e0da9b left promiscuous mode
+Jan  6 19:23:38 DESKTOP-BLRRBQO kernel: [50827.012800] docker0: port 1(veth8e0da9b) entered disabled state
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.297081] docker0: port 1(veth9e47025) entered blocking state
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.297893] docker0: port 1(veth9e47025) entered disabled state
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.298850] device veth9e47025 entered promiscuous mode
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.612256] eth0: renamed from vethb30fea8
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.662290] IPv6: ADDRCONF(NETDEV_CHANGE): veth9e47025: link becomes ready
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.663008] docker0: port 1(veth9e47025) entered blocking state
+Jan  6 19:23:43 DESKTOP-BLRRBQO kernel: [50832.663404] docker0: port 1(veth9e47025) entered forwarding state
+Jan  6 19:30:26 DESKTOP-BLRRBQO kernel: [51235.757667] docker0: port 1(veth9e47025) entered disabled state
+Jan  6 19:30:26 DESKTOP-BLRRBQO kernel: [51235.758410] vethb30fea8: renamed from eth0
+Jan  6 19:30:26 DESKTOP-BLRRBQO rsyslogd: omfwd: TCPSendBuf error -2027, destruct TCP Connection to 192.168.188.52:514 [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 19:30:26 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 19:30:26 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 19:30:27 DESKTOP-BLRRBQO kernel: [51235.982162] docker0: port 1(veth9e47025) entered disabled state
+Jan  6 19:30:27 DESKTOP-BLRRBQO kernel: [51235.982957] device veth9e47025 left promiscuous mode
+Jan  6 19:30:27 DESKTOP-BLRRBQO kernel: [51235.983293] docker0: port 1(veth9e47025) entered disabled state
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.267309] docker0: port 1(vethdb54bcc) entered blocking state
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.268036] docker0: port 1(vethdb54bcc) entered disabled state
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.268688] device vethdb54bcc entered promiscuous mode
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.622226] eth0: renamed from vethe316471
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.712186] IPv6: ADDRCONF(NETDEV_CHANGE): vethdb54bcc: link becomes ready
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.712772] docker0: port 1(vethdb54bcc) entered blocking state
+Jan  6 19:30:32 DESKTOP-BLRRBQO kernel: [51241.713184] docker0: port 1(vethdb54bcc) entered forwarding state
+Jan  6 19:31:46 DESKTOP-BLRRBQO kernel: [51315.018077] docker0: port 1(vethdb54bcc) entered disabled state
+Jan  6 19:31:46 DESKTOP-BLRRBQO kernel: [51315.018667] vethe316471: renamed from eth0
+Jan  6 19:31:46 DESKTOP-BLRRBQO kernel: [51315.174074] docker0: port 1(vethdb54bcc) entered disabled state
+Jan  6 19:31:46 DESKTOP-BLRRBQO kernel: [51315.174918] device vethdb54bcc left promiscuous mode
+Jan  6 19:31:46 DESKTOP-BLRRBQO kernel: [51315.175245] docker0: port 1(vethdb54bcc) entered disabled state
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.138521] docker0: port 1(veth2885591) entered blocking state
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.139074] docker0: port 1(veth2885591) entered disabled state
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.139643] device veth2885591 entered promiscuous mode
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.502219] eth0: renamed from vethc1d6370
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.562149] IPv6: ADDRCONF(NETDEV_CHANGE): veth2885591: link becomes ready
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.562838] docker0: port 1(veth2885591) entered blocking state
+Jan  6 19:32:11 DESKTOP-BLRRBQO kernel: [51340.563279] docker0: port 1(veth2885591) entered forwarding state
+Jan  6 19:35:35 DESKTOP-BLRRBQO kernel: [51544.630980] docker0: port 1(veth2885591) entered disabled state
+Jan  6 19:35:35 DESKTOP-BLRRBQO kernel: [51544.631747] vethc1d6370: renamed from eth0
+Jan  6 19:35:35 DESKTOP-BLRRBQO kernel: [51544.812026] docker0: port 1(veth2885591) entered disabled state
+Jan  6 19:35:35 DESKTOP-BLRRBQO kernel: [51544.812770] device veth2885591 left promiscuous mode
+Jan  6 19:35:35 DESKTOP-BLRRBQO kernel: [51544.813079] docker0: port 1(veth2885591) entered disabled state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.120005] docker0: port 1(veth950bbf6) entered blocking state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.120771] docker0: port 1(veth950bbf6) entered disabled state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.122048] device veth950bbf6 entered promiscuous mode
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.122617] docker0: port 1(veth950bbf6) entered blocking state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.123212] docker0: port 1(veth950bbf6) entered forwarding state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.124025] docker0: port 1(veth950bbf6) entered disabled state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.472342] eth0: renamed from vethe57b7e3
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.512179] IPv6: ADDRCONF(NETDEV_CHANGE): veth950bbf6: link becomes ready
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.512760] docker0: port 1(veth950bbf6) entered blocking state
+Jan  6 19:35:41 DESKTOP-BLRRBQO kernel: [51550.513390] docker0: port 1(veth950bbf6) entered forwarding state
+Jan  6 19:41:35 DESKTOP-BLRRBQO kernel: [51904.443343] docker0: port 1(veth950bbf6) entered disabled state
+Jan  6 19:41:35 DESKTOP-BLRRBQO kernel: [51904.444302] vethe57b7e3: renamed from eth0
+Jan  6 19:41:35 DESKTOP-BLRRBQO kernel: [51904.603072] docker0: port 1(veth950bbf6) entered disabled state
+Jan  6 19:41:35 DESKTOP-BLRRBQO kernel: [51904.604059] device veth950bbf6 left promiscuous mode
+Jan  6 19:41:35 DESKTOP-BLRRBQO kernel: [51904.604713] docker0: port 1(veth950bbf6) entered disabled state
+Jan  6 19:41:40 DESKTOP-BLRRBQO kernel: [51909.936561] docker0: port 1(vethe3c227d) entered blocking state
+Jan  6 19:41:40 DESKTOP-BLRRBQO kernel: [51909.937760] docker0: port 1(vethe3c227d) entered disabled state
+Jan  6 19:41:40 DESKTOP-BLRRBQO kernel: [51909.938327] device vethe3c227d entered promiscuous mode
+Jan  6 19:41:41 DESKTOP-BLRRBQO kernel: [51910.272287] eth0: renamed from veth4606e7c
+Jan  6 19:41:41 DESKTOP-BLRRBQO kernel: [51910.332135] IPv6: ADDRCONF(NETDEV_CHANGE): vethe3c227d: link becomes ready
+Jan  6 19:41:41 DESKTOP-BLRRBQO kernel: [51910.332697] docker0: port 1(vethe3c227d) entered blocking state
+Jan  6 19:41:41 DESKTOP-BLRRBQO kernel: [51910.333141] docker0: port 1(vethe3c227d) entered forwarding state
+Jan  6 19:44:19 DESKTOP-BLRRBQO kernel: [52068.358053] docker0: port 1(vethe3c227d) entered disabled state
+Jan  6 19:44:19 DESKTOP-BLRRBQO kernel: [52068.358849] veth4606e7c: renamed from eth0
+Jan  6 19:44:19 DESKTOP-BLRRBQO kernel: [52068.512135] docker0: port 1(vethe3c227d) entered disabled state
+Jan  6 19:44:19 DESKTOP-BLRRBQO kernel: [52068.513031] device vethe3c227d left promiscuous mode
+Jan  6 19:44:19 DESKTOP-BLRRBQO kernel: [52068.513406] docker0: port 1(vethe3c227d) entered disabled state
+Jan  6 19:44:24 DESKTOP-BLRRBQO kernel: [52073.864283] docker0: port 1(veth18343fe) entered blocking state
+Jan  6 19:44:24 DESKTOP-BLRRBQO kernel: [52073.865093] docker0: port 1(veth18343fe) entered disabled state
+Jan  6 19:44:24 DESKTOP-BLRRBQO kernel: [52073.865808] device veth18343fe entered promiscuous mode
+Jan  6 19:44:25 DESKTOP-BLRRBQO kernel: [52074.202187] eth0: renamed from veth5a87274
+Jan  6 19:44:25 DESKTOP-BLRRBQO kernel: [52074.262243] IPv6: ADDRCONF(NETDEV_CHANGE): veth18343fe: link becomes ready
+Jan  6 19:44:25 DESKTOP-BLRRBQO kernel: [52074.262829] docker0: port 1(veth18343fe) entered blocking state
+Jan  6 19:44:25 DESKTOP-BLRRBQO kernel: [52074.263327] docker0: port 1(veth18343fe) entered forwarding state
+Jan  6 19:46:17 DESKTOP-BLRRBQO kernel: [52186.387413] docker0: port 1(veth18343fe) entered disabled state
+Jan  6 19:46:17 DESKTOP-BLRRBQO kernel: [52186.388006] veth5a87274: renamed from eth0
+Jan  6 19:46:17 DESKTOP-BLRRBQO kernel: [52186.552067] docker0: port 1(veth18343fe) entered disabled state
+Jan  6 19:46:17 DESKTOP-BLRRBQO kernel: [52186.552804] device veth18343fe left promiscuous mode
+Jan  6 19:46:17 DESKTOP-BLRRBQO kernel: [52186.553211] docker0: port 1(veth18343fe) entered disabled state
+Jan  6 19:46:22 DESKTOP-BLRRBQO kernel: [52191.899540] docker0: port 1(veth2b60c7d) entered blocking state
+Jan  6 19:46:22 DESKTOP-BLRRBQO kernel: [52191.900316] docker0: port 1(veth2b60c7d) entered disabled state
+Jan  6 19:46:22 DESKTOP-BLRRBQO kernel: [52191.901013] device veth2b60c7d entered promiscuous mode
+Jan  6 19:46:23 DESKTOP-BLRRBQO kernel: [52192.212110] eth0: renamed from veth6590d87
+Jan  6 19:46:23 DESKTOP-BLRRBQO kernel: [52192.312047] IPv6: ADDRCONF(NETDEV_CHANGE): veth2b60c7d: link becomes ready
+Jan  6 19:46:23 DESKTOP-BLRRBQO kernel: [52192.312693] docker0: port 1(veth2b60c7d) entered blocking state
+Jan  6 19:46:23 DESKTOP-BLRRBQO kernel: [52192.313191] docker0: port 1(veth2b60c7d) entered forwarding state
+Jan  6 20:05:19 DESKTOP-BLRRBQO kernel: [53328.797359] docker0: port 1(veth2b60c7d) entered disabled state
+Jan  6 20:05:19 DESKTOP-BLRRBQO kernel: [53328.798414] veth6590d87: renamed from eth0
+Jan  6 20:05:19 DESKTOP-BLRRBQO kernel: [53328.942447] docker0: port 1(veth2b60c7d) entered disabled state
+Jan  6 20:05:19 DESKTOP-BLRRBQO kernel: [53328.943362] device veth2b60c7d left promiscuous mode
+Jan  6 20:05:19 DESKTOP-BLRRBQO kernel: [53328.943832] docker0: port 1(veth2b60c7d) entered disabled state
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.270533] docker0: port 1(veth2a24eb2) entered blocking state
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.271396] docker0: port 1(veth2a24eb2) entered disabled state
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.272377] device veth2a24eb2 entered promiscuous mode
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.592058] eth0: renamed from veth5a85aff
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.661939] IPv6: ADDRCONF(NETDEV_CHANGE): veth2a24eb2: link becomes ready
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.662486] docker0: port 1(veth2a24eb2) entered blocking state
+Jan  6 20:05:25 DESKTOP-BLRRBQO kernel: [53334.663015] docker0: port 1(veth2a24eb2) entered forwarding state
+Jan  6 22:53:22 DESKTOP-BLRRBQO kernel: [63411.375243] init: (1244) ERROR: Create:129: bind failed 98
+Jan  6 22:53:22 DESKTOP-BLRRBQO rsyslogd: omfwd: TCPSendBuf error -2027, destruct TCP Connection to 192.168.188.52:514 [v8.2001.0 try https://www.rsyslog.com/e/2027 ]
+Jan  6 22:53:22 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one giving the reason for suspension. [v8.2001.0 try https://www.rsyslog.com/e/2007 ]
+Jan  6 22:53:22 DESKTOP-BLRRBQO rsyslogd: action 'action-8-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2001.0 try https://www.rsyslog.com/e/2359 ]
+Jan  6 22:55:42 DESKTOP-BLRRBQO kernel: [63551.243645] init: (1525) ERROR: Create:129: bind failed 98
+Jan  6 22:56:23 DESKTOP-BLRRBQO kernel: [63592.498907] init: (1598) ERROR: Create:129: bind failed 98
+                                                                                                      
