@@ -45,6 +45,9 @@ func init() {
 	rootCmd.SetUsageTemplate(usageTemplate)
 	rootCmd.PersistentFlags().String("immudb-host", "localhost", "immudb host")
 	rootCmd.PersistentFlags().Int("immudb-port", 3322, "immudb port")
+	rootCmd.PersistentFlags().String("immudb-database", "defaultdb", "immudb database")
+	rootCmd.PersistentFlags().String("immudb-user", "immudb", "immudb user")
+	rootCmd.PersistentFlags().String("immudb-password", "immudb", "immudb user password")
 	rootCmd.PersistentFlags().String("log-level", "info", "Log level (trace, debug, info, warn, error)")
 
 }
@@ -64,10 +67,14 @@ func root(cmd *cobra.Command, args []string) error {
 
 	immudbHost, _ := cmd.Flags().GetString("immudb-host")
 	immudbPort, _ := cmd.Flags().GetInt("immudb-port")
+	immudbDb, _ := cmd.Flags().GetString("immudb-database")
+	immudbUser, _ := cmd.Flags().GetString("immudb-user")
+	immudbPassword, _ := cmd.Flags().GetString("immudb-password")
+
 	opts := client.DefaultOptions().WithAddress(immudbHost).WithPort(immudbPort)
 	immuCli = client.NewClient().WithOptions(opts)
 
-	err = immuCli.OpenSession(context.TODO(), []byte(`immudb`), []byte(`immudb`), "defaultdb")
+	err = immuCli.OpenSession(context.TODO(), []byte(immudbUser), []byte(immudbPassword), immudbDb)
 	if err != nil {
 		return err
 	}
