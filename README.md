@@ -225,6 +225,7 @@ Audit
 Sources:
  - equivalent of kubectl logs
  - syslog server
+ - ubuntu/rhel login tracking, auth.log
 
 Deployment:
  - add dockerfile 
@@ -233,6 +234,8 @@ Parsers:
  - apache access logs
  - traefik/nginx logs
  - mariadb audit https://mariadb.com/kb/en/mariadb-audit-plugin/
+ - ubuntu/rhel auth.log parser 
+ - templating/pattern matching for unstructured logs 
 
 Others:
  - OpenPolicyAgent logs ?
