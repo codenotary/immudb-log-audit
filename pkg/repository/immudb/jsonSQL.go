@@ -163,7 +163,7 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 		}
 
 		for _, r := range res.Rows {
-			ret = append(ret, r.Values[0].GetBs())
+			ret = append(ret, r.Values[1].GetBs())
 		}
 
 		if jr.columns[0].cType == "INTEGER" {
