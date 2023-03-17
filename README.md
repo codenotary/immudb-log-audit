@@ -220,3 +220,20 @@ Audit
 ```bash
 ./immudb-log-audit audit sql syslog
 ```
+
+## Further ideas to develop
+Sources:
+ - equivalent of kubectl logs
+ - syslog server
+
+Deployment:
+ - add dockerfile 
+
+Parsers:
+ - apache access logs
+ - traefik/nginx logs
+ - mariadb audit https://mariadb.com/kb/en/mariadb-audit-plugin/
+
+Others:
+ - OpenPolicyAgent logs ?
+
