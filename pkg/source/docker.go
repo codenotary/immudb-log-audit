@@ -59,7 +59,7 @@ func (dt *DockerTail) ReadLine() (string, error) {
 			return "", nil
 		}
 
-		if b[0] == 1 || b[0] == 2 {
+		if len(b) > 8 && (b[0] == 1 || b[0] == 2) {
 			return string(b[8:]), nil
 		}
 
