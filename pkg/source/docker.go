@@ -54,6 +54,11 @@ func NewDockerTail(container string, follow bool, since string, showStdout bool,
 func (dt *DockerTail) ReadLine() (string, error) {
 	if dt.scanner.Scan() {
 		b := dt.scanner.Bytes()
+
+		if len(b) == 0 {
+			return "", nil
+		}
+
 		if b[0] == 1 || b[0] == 2 {
 			return string(b[8:]), nil
 		}
