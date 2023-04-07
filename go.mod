@@ -6,8 +6,8 @@ require (
 	github.com/codenotary/immudb v1.4.1
 	github.com/docker/docker v23.0.1+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/hpcloud/tail v1.0.0
 	github.com/lib/pq v1.10.7
+	github.com/nxadm/tail v1.4.8
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.7.1
@@ -65,7 +65,6 @@ require (
 	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd // indirect
 	google.golang.org/grpc v1.46.2 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

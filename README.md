@@ -86,7 +86,7 @@ immudb-log-audit has simple pgaudit log line parser. It assumes that each log li
 
 To start, you need to have an PostgreSQL running with pgaudit extension enabled. As the example, [bitnami postgresql](https://hub.docker.com/r/bitnami/postgresql) which already hase pgaudi extension can be used. 
 
-The example pgaudi log line looks like:
+The example pgaudit log line looks like:
 ```
 2023-02-03 21:15:01.851 GMT [294] LOG:  AUDIT: SESSION,61,1,WRITE,INSERT,,,"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('134ff2d5-2db4-44d2-9f67-9c7f5ed64967', NOW(), 'user60', 1, '127.0.0.1', 'some context')",<not logged>
 ```
@@ -98,7 +98,12 @@ pgaudit parser will convert each log line into following json
 
 The indexed fields for pgaudit are
 ```
-statement_id log_timestamp timestamp audit_type class command
+statement_id substatement_id log_timestamp timestamp audit_type class command
+```
+
+With primary key as
+```
+statement_id+substatement_id
 ```
 
 ### How to set up

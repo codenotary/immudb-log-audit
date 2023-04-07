@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -101,14 +101,16 @@ func (jr *JsonKVRepository) WriteBytes(jBytes []byte) (uint64, error) {
 	gjsonObject := gjson.ParseBytes(jBytes)
 
 	// resolve primary key, format "key1+key2+..."
-	var pk string
+	var pks []string
 	for _, pkPart := range strings.Split(jr.indexedKeys[0], "+") {
 		gjPK := gjsonObject.Get(pkPart)
 		if !gjPK.Exists() {
 			return 0, fmt.Errorf("missing primary key in json, %s", pkPart)
 		}
-		pk += gjPK.String()
+		pks = append(pks, gjPK.String())
 	}
+
+	pk := strings.Join(pks, "_")
 
 	immudbObjectRequest := &schema.SetRequest{
 		KVs: []*schema.KeyValue{

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,11 +48,15 @@ func createSQL(cmd *cobra.Command, args []string) error {
 	primaryKey, _ := cmd.Flags().GetStringSlice("primary-key")
 	flagColumns, _ := cmd.Flags().GetStringSlice("columns")
 	if flagParser == "pgaudit" {
-		flagColumns = []string{"statement_id=INTEGER", "log_timestamp=TIMESTAMP", "timestamp=TIMESTAMP", "audit_type=VARCHAR[256]", "class=VARCHAR[256]", "command=VARCHAR[256]"}
-		primaryKey = []string{"statement_id"}
+		flagColumns = []string{"id=INTEGER AUTO_INCREMENT", "statement_id=INTEGER", "substatement_id=INTEGER", "server_timestamp=TIMESTAMP", "timestamp=TIMESTAMP", "audit_type=VARCHAR[256]", "class=VARCHAR[256]", "command=VARCHAR[256]"}
+		primaryKey = []string{"id"}
 		log.WithField("columns", flagColumns).WithField("primary_key", primaryKey).Info("Using default indexes for pgaudit parser")
+	} else if flagParser == "pgauditjsonlog" {
+		flagColumns = []string{"id=INTEGER AUTO_INCREMENT", "user=VARCHAR[256]", "dbname=VARCHAR[256]", "session_id=VARCHAR[256]", "statement_id=INTEGER", "substatement_id=INTEGER", "server_timestamp=TIMESTAMP", "timestamp=TIMESTAMP", "audit_type=VARCHAR[256]", "class=VARCHAR[256]", "command=VARCHAR[256]"}
+		primaryKey = []string{"id"}
+		log.WithField("columns", flagColumns).WithField("primary_key", primaryKey).Info("Using default indexes for pgauditjsonlog parser")
 	} else if flagParser == "wrap" {
-		flagColumns = []string{"uid=VARCHAR[256]", "log_timestamp=TIMESTAMP"}
+		flagColumns = []string{"uid=VARCHAR[36]", "log_timestamp=TIMESTAMP"}
 		primaryKey = []string{"uid"}
 		log.WithField("columns", flagColumns).WithField("primary_key", primaryKey).Info("Using default indexes for wrap parser")
 	} else if flagParser != "" {

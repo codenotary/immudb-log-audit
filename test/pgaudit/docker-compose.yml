@@ -7,10 +7,13 @@ services:
       - '5432:5432'
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
+      - './logs:/logs'
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'POSTGRESQL_PGAUDIT_LOG=ALL'
+      - "POSTGRESQL_EXTRA_FLAGS=-c log_destination=jsonlog -c logging_collector=true -c log_directory=/logs -c log_filename=posgresql-%M.json -c log_rotation_age=1 -c log_truncate_on_rotation=on"
 
 volumes:
   postgresql_data:
     driver: local
+

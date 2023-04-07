@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
@@ -38,7 +39,7 @@ func PopulatePSQL() {
 		log.Fatal("could not create table", err)
 	}
 
-	for i := 0; i < 3000; i++ {
+	for i := 0; i < 100000; i++ {
 		log.Printf("QUERY: %s\n", fmt.Sprintf("insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('%s', NOW(), '%s', 1, '127.0.0.1', 'some context')",
 			uuid.New().String(), "user"+fmt.Sprint(i)))
 		_, err := db.Exec(fmt.Sprintf("insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('%s', NOW(), '%s', 1, '127.0.0.1', 'some context')",
@@ -46,6 +47,7 @@ func PopulatePSQL() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		time.Sleep(5 * time.Second)
 	}
 
 }
