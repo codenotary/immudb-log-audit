@@ -20,8 +20,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/codenotary/immudb/pkg/client"
 	log "github.com/sirupsen/logrus"
@@ -29,7 +27,6 @@ import (
 )
 
 var immuCli client.ImmuClient
-var signals = make(chan os.Signal, 1)
 
 var rootCmd = &cobra.Command{
 	Use:               "immudb-log-audit",
@@ -68,8 +65,6 @@ func init() {
 	rootCmd.PersistentFlags().String("immudb-user", "immudb", "immudb user")
 	rootCmd.PersistentFlags().String("immudb-password", "immudb", "immudb user password")
 	rootCmd.PersistentFlags().String("log-level", "info", "Log level (trace, debug, info, warn, error)")
-
-	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 }
 
 func root(cmd *cobra.Command, args []string) error {

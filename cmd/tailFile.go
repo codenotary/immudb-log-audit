@@ -19,7 +19,9 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
@@ -42,9 +44,6 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
 	cfg, err := immudb.NewConfigs(immuCli).Read(args[0])
 	if err != nil {
 		return fmt.Errorf("collection does not exist, please create one first, %w", err)
@@ -60,6 +59,15 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		<-signals
+		cancel()
+	}()
+
 	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
@@ -67,15 +75,10 @@ func tailFile(cmd *cobra.Command, args []string) error {
 
 	s := service.NewAuditService(fileTail, lp, jsonRepository)
 
-	go func() {
-		err := s.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	<-signals
-	return nil
+	err = s.Run()
+	signal.Stop(signals)
+	close(signals)
+	return err
 }
 
 func init() {

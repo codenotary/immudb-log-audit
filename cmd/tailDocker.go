@@ -17,7 +17,11 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
@@ -61,13 +65,25 @@ func tailDocker(cmd *cobra.Command, args []string) error {
 	flagSince, _ := cmd.Flags().GetString("since")
 	flagStdout, _ := cmd.Flags().GetBool("stdout")
 	flagStderr, _ := cmd.Flags().GetBool("stderr")
-	dockerTail, err := source.NewDockerTail(args[1], flagFollow, flagSince, flagStdout, flagStderr)
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		<-signals
+		cancel()
+	}()
+
+	dockerTail, err := source.NewDockerTail(ctx, args[1], flagFollow, flagSince, flagStdout, flagStderr)
 	if err != nil {
 		return fmt.Errorf("invalide source: %w", err)
 	}
 
 	s := service.NewAuditService(dockerTail, lp, jsonRepository)
-	return s.Run()
+	err = s.Run()
+	signal.Stop(signals)
+	close(signals)
+	return err
 }
 
 func init() {

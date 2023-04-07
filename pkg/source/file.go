@@ -123,7 +123,7 @@ func (ft *fileTail) watchFiles() {
 									fw.Fm.Offset = 0
 								}
 
-								fw.Fm.Offset += int64(len(l.Text))
+								fw.Fm.Offset += int64(len(l.Text)) + 1
 								if fw.Fm.PrefixLength < 1000 {
 									fw.Fm.Prefix = append(fw.Fm.Prefix, []byte(l.Text)...)
 									fw.Fm.Prefix = append(fw.Fm.Prefix, []byte("\n")...)
@@ -136,6 +136,10 @@ func (ft *fileTail) watchFiles() {
 			}
 
 			ft.saveRegistry()
+
+			if !ft.follow {
+				break
+			}
 
 			select {
 			case <-ft.ctx.Done():
@@ -190,8 +194,8 @@ nextFile:
 				if n != v.Fm.PrefixLength || err != nil {
 					log.WithError(err).WithField("file", m).Debug("Not a matching file, skipping")
 				} else if bytes.Equal(prefixBytes, v.Fm.Prefix) {
-					log.WithField("file", k).Debug("Previous file detected")
-					t, err := tail.TailFile(m, tail.Config{Follow: ft.follow, Logger: log.WithField("TAIL", m), Location: &tail.SeekInfo{Offset: v.Fm.Offset, Whence: 0}})
+					log.WithField("file", k).WithField("offset", v.Fm.Offset).Debug("Previous file detected")
+					t, err := tail.TailFile(m, tail.Config{Follow: ft.follow, Logger: log.WithField("TAIL", m), Location: &tail.SeekInfo{Offset: v.Fm.Offset, Whence: io.SeekStart}})
 					if err != nil {
 						log.WithError(err).WithField("file", m).Warn("Could not start new tail, skipping")
 						continue
@@ -199,6 +203,7 @@ nextFile:
 
 					newFileRegistry[m] = fileWatch{fi: &fi, t: t, Fm: v.Fm}
 					delete(ft.fileRegistry, k)
+					newFiles = append(newFiles, newFileRegistry[m])
 					continue nextFile
 				} else {
 					log.WithError(err).WithField("file", m).WithField("prefixStored", string(v.Fm.Prefix)).WithField("prefixRead", string(prefixBytes)).Debug("Prefix mismatch, skipping")

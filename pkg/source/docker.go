@@ -31,15 +31,15 @@ type dockerTail struct {
 	scanner *bufio.Scanner
 }
 
-func NewDockerTail(container string, follow bool, since string, showStdout bool, showStderr bool) (*dockerTail, error) {
+func NewDockerTail(ctx context.Context, container string, follow bool, since string, showStdout bool, showStderr bool) (*dockerTail, error) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		return nil, fmt.Errorf("could not create docker client, %w", err)
 	}
 
-	cli.NegotiateAPIVersion(context.TODO())
+	cli.NegotiateAPIVersion(ctx)
 
-	reader, err := cli.ContainerLogs(context.TODO(), container, types.ContainerLogsOptions{Follow: follow, Since: since, ShowStdout: showStdout, ShowStderr: showStderr})
+	reader, err := cli.ContainerLogs(ctx, container, types.ContainerLogsOptions{Follow: follow, Since: since, ShowStdout: showStdout, ShowStderr: showStderr})
 	if err != nil {
 		return nil, fmt.Errorf("could not create docker logs reader: %w", err)
 	}
