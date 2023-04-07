@@ -19,6 +19,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
@@ -41,6 +42,9 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	cfg, err := immudb.NewConfigs(immuCli).Read(args[0])
 	if err != nil {
 		return fmt.Errorf("collection does not exist, please create one first, %w", err)
@@ -56,13 +60,22 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
-	fileTail, err := source.NewFileTail(context.TODO(), args[1], flagFollow)
+	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
 
 	s := service.NewAuditService(fileTail, lp, jsonRepository)
-	return s.Run()
+
+	go func() {
+		err := s.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	<-signals
+	return nil
 }
 
 func init() {
