@@ -17,6 +17,7 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
@@ -55,7 +56,7 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
-	fileTail, err := source.NewFileTail(args[1], flagFollow)
+	fileTail, err := source.NewFileTail(context.TODO(), args[1], flagFollow)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
