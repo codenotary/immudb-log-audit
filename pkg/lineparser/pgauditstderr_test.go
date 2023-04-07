@@ -27,17 +27,17 @@ import (
 func TestPgauditParse(t *testing.T) {
 	type testData struct {
 		line      string
-		expected  *PGAuditStderrEntry
+		expected  *pgAuditStderrEntry
 		expectErr bool
 	}
 
 	tdd := []testData{
 		{
 			line: `2023-02-03 21:15:01.759 GMT [294] LOG:  AUDIT: SESSION,1,1,WRITE,INSERT,,,"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('c06984ff-ea4b-44e1-a7ff-d08376180614', NOW(), 'user0', 1, '127.0.0.1', 'some context')",<not logged>`,
-			expected: &PGAuditStderrEntry{
+			expected: &pgAuditStderrEntry{
 				Timestamp:       time.Now(),
 				ServerTimestamp: time.Date(2023, 02, 03, 21, 15, 1, 759*1000000, func() *time.Location { l, _ := time.LoadLocation("GMT"); return l }()),
-				PGAuditEntry: PGAuditEntry{
+				pgAuditEntry: pgAuditEntry{
 					AuditType:      "SESSION",
 					StatementID:    1,
 					SubstatementID: 1,
@@ -68,7 +68,7 @@ func TestPgauditParse(t *testing.T) {
 			continue
 		}
 
-		var entry PGAuditStderrEntry
+		var entry pgAuditStderrEntry
 		assert.NoError(t, json.Unmarshal(b, &entry))
 		assert.NotEmpty(t, entry.UID)
 		assert.Equal(t, td.expected.AuditType, entry.AuditType)

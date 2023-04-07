@@ -45,8 +45,8 @@ func (pgt *pgauditTimestamp) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
-type PGAuditJSONLogEntry struct {
-	PGAuditEntry
+type pgAuditJSONLogEntry struct {
+	pgAuditEntry
 	UID             string           `json:"uid"`
 	ServerTimestamp time.Time        `json:"server_timestamp"`
 	Timestamp       pgauditTimestamp `json:"timestamp"`
@@ -60,14 +60,14 @@ type PGAuditJSONLogEntry struct {
 	SessionStart    pgauditTimestamp `json:"session_start"`
 }
 
-type PGAuditJSONLogLineParser struct {
+type pgAuditJSONLogLineParser struct {
 }
 
-func NewPGAuditJSONLogLineParser() *PGAuditJSONLogLineParser {
-	return &PGAuditJSONLogLineParser{}
+func NewPGAuditJSONLogLineParser() *pgAuditJSONLogLineParser {
+	return &pgAuditJSONLogLineParser{}
 }
 
-func (p *PGAuditJSONLogLineParser) Parse(line string) ([]byte, error) {
+func (p *pgAuditJSONLogLineParser) Parse(line string) ([]byte, error) {
 	r := gjson.Get(line, "message")
 	if !r.Exists() {
 		return nil, errors.New("not a pgaudit line, missing 'messagae' field")
@@ -78,13 +78,13 @@ func (p *PGAuditJSONLogLineParser) Parse(line string) ([]byte, error) {
 		return nil, fmt.Errorf("not a pgaudit line, %w", err)
 	}
 
-	var pgaje PGAuditJSONLogEntry
+	var pgaje pgAuditJSONLogEntry
 	err = json.Unmarshal([]byte(line), &pgaje)
 	if err != nil {
 		return nil, fmt.Errorf("could not unmarshal json log, %w", err)
 	}
 
-	pgaje.PGAuditEntry = *pgae
+	pgaje.pgAuditEntry = *pgae
 	pgaje.UID = uuid.New().String()
 	pgaje.ServerTimestamp = time.Now().UTC()
 

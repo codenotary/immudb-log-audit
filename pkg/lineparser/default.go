@@ -16,13 +16,13 @@ limitations under the License.
 
 package lineparser
 
-type DefaultLineParser struct {
+type defaultLineParser struct {
 }
 
-func NewDefaultLineParser() *DefaultLineParser {
-	return &DefaultLineParser{}
+func NewDefaultLineParser() *defaultLineParser {
+	return &defaultLineParser{}
 }
 
-func (*DefaultLineParser) Parse(line string) ([]byte, error) {
+func (*defaultLineParser) Parse(line string) ([]byte, error) {
 	return []byte(line), nil
 }

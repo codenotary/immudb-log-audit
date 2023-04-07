@@ -29,14 +29,14 @@ type wrap struct {
 	Message string    `json:"message"`
 }
 
-type WrapLineParser struct {
+type wrapLineParser struct {
 }
 
-func NewWrapLineParser() *WrapLineParser {
-	return &WrapLineParser{}
+func NewWrapLineParser() *wrapLineParser {
+	return &wrapLineParser{}
 }
 
-func (*WrapLineParser) Parse(line string) ([]byte, error) {
+func (*wrapLineParser) Parse(line string) ([]byte, error) {
 	w := wrap{
 		UID:     uuid.New().String(),
 		Ts:      time.Now(),

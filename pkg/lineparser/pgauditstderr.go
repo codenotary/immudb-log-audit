@@ -27,21 +27,21 @@ import (
 	"github.com/google/uuid"
 )
 
-type PGAuditStderrEntry struct {
-	PGAuditEntry
+type pgAuditStderrEntry struct {
+	pgAuditEntry
 	UID             string    `json:"uid"`
 	Timestamp       time.Time `json:"timestamp"`        // timestamp from log line
 	ServerTimestamp time.Time `json:"server_timestamp"` // server timestamp
 }
 
-type PGAuditLineParser struct {
+type pgAuditLineParser struct {
 }
 
-func NewPGAuditLineParser() *PGAuditLineParser {
-	return &PGAuditLineParser{}
+func NewPGAuditLineParser() *pgAuditLineParser {
+	return &pgAuditLineParser{}
 }
 
-func (p *PGAuditLineParser) Parse(line string) ([]byte, error) {
+func (p *pgAuditLineParser) Parse(line string) ([]byte, error) {
 	// assumed default log_line_prefix '%m [%p] '
 	if len(line) < 26 { // min length of timestamp with timezone
 		return nil, fmt.Errorf("invalid log line prefix, too short")
@@ -84,11 +84,11 @@ func (p *PGAuditLineParser) Parse(line string) ([]byte, error) {
 		return nil, fmt.Errorf("could not parse substatementID, %w", err)
 	}
 
-	pgae := &PGAuditStderrEntry{
+	pgae := &pgAuditStderrEntry{
 		UID:             uuid.New().String(),
 		ServerTimestamp: time.Now().UTC(),
 		Timestamp:       ts,
-		PGAuditEntry: PGAuditEntry{
+		pgAuditEntry: pgAuditEntry{
 			AuditType:      csvFields[0],
 			StatementID:    statementID,
 			SubstatementID: substatementID,
