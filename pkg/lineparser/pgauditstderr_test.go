@@ -82,5 +82,6 @@ func TestPgauditParse(t *testing.T) {
 		assert.Equal(t, td.expected.Statement, td.expected.Statement)
 		assert.Equal(t, td.expected.StatementID, td.expected.StatementID)
 		assert.Equal(t, td.expected.SubstatementID, td.expected.SubstatementID)
+		assert.NotEmpty(t, entry.UID)
 	}
 }
