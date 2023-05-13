@@ -1,19 +1,72 @@
 version: '2'
 
 services:
+  # Peeded to set up proper permissions for non root user in bitnami/postgresql
+  volume_init:
+    image: alpine
+    volumes: 
+      - 'postgresql_logs:/logs'
+    user: root
+    group_add:
+      - '1000'
+    command: chown -R 1001:1000 /logs
+
   postgresql:
     image: docker.io/bitnami/postgresql:15
     ports:
       - '5432:5432'
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
-      - './logs:/logs'
+      - 'postgresql_logs:/logs'
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'POSTGRESQL_PGAUDIT_LOG=ALL'
+      # Configure postgresql to store data in /logs folder in json format, every minute. There will be log file per each minute, rotating every 60 minutes. 
+      # It can be changed to rotate per hour, day etc..
       - "POSTGRESQL_EXTRA_FLAGS=-c log_destination=jsonlog -c logging_collector=true -c log_directory=/logs -c log_filename=posgresql-%M.json -c log_rotation_age=1 -c log_truncate_on_rotation=on"
+    depends_on:
+      - volume_init
+
+  immudb:
+    image: codenotary/immudb:local
+    ports:
+      - '3322:3322'
+      - '8080:8080'
+    volumes:
+      - 'immudb_data:/var/lib/immudb'
+
+  # Create colleciton in immudb
+  immudb-log-audit-init:
+    image: immudb-log-audit:local
+    command: create kv psqljson --parser pgauditjsonlog --log-level trace --immudb-host immudb
+    depends_on:
+      - postgresql
+      - immudb
+
+  # Send audit logs to immudb
+  immudb-log-audit:
+    image: immudb-log-audit:local
+    command: tail file psqljson "/logs/*" --follow --log-level trace --immudb-host immudb
+    volumes: 
+      - 'immudb-log-audit_data:/data'
+      - 'postgresql_logs:/logs'
+    depends_on:
+      - postgresql
+      - immudb
+      - immudb-log-audit-init
+
 
 volumes:
+  # Permanent storage for posgresql database
   postgresql_data:
+    driver: local
+  # Permanent storage for posgresql logs
+  postgresql_logs:
+    driver: local
+  # Permanent storage for immudb database
+  immudb_data:
+    driver: local
+  # Permanent storage for immudb-log-audit. Used for tracking already monitored files. 
+  immudb-log-audit_data:
     driver: local
 

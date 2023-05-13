@@ -17,7 +17,7 @@ WORKDIR /src
 COPY . .
 RUN GOOS=linux GOARCH=amd64 go build -v
 
-FROM scratch
+FROM alpine
 COPY --from=build /etc/ssl/certs /etc/ssl/certs
 COPY --from=build /src/immudb-log-audit /app/immudb-log-audit
 
