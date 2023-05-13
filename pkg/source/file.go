@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"sync"
 	"time"
@@ -28,36 +29,53 @@ type fileWatch struct {
 }
 
 type fileTail struct {
-	pattern      string
-	follow       bool
-	fileRegistry map[string]fileWatch
-	lC           chan string
-	wg           sync.WaitGroup
-	ctx          context.Context
+	pattern        string
+	follow         bool
+	registryDBFile string
+	registry       map[string]fileWatch
+	lC             chan string
+	wg             sync.WaitGroup
+	ctx            context.Context
 }
 
-func NewFileTail(ctx context.Context, pattern string, follow bool) (*fileTail, error) {
+func NewFileTail(ctx context.Context, pattern string, follow bool, registryFolder string) (*fileTail, error) {
 
-	fileRegistry := map[string]fileWatch{}
+	registry := map[string]fileWatch{}
 
-	frBytes, err := os.ReadFile("fileregistry.json")
-	if err != nil {
-		log.WithError(err).Info("fileregistry.json cannot be read")
-	} else {
-		err = json.Unmarshal(frBytes, &fileRegistry)
+	registryDBFile := "registryFile.txt"
+
+	if registryFolder != "" {
+		fi, err := os.Stat(registryFolder)
 		if err != nil {
-			log.WithError(err).Info("fileregistry.json cannot be unmarshaled, ignoring")
+			return nil, fmt.Errorf("could not stat registry directory: %w", err)
+		}
+
+		if !fi.IsDir() {
+			return nil, fmt.Errorf("registry folder is not a directory")
+		}
+
+		registryDBFile = path.Join(registryFolder, registryDBFile)
+	}
+
+	frBytes, err := os.ReadFile(registryDBFile)
+	if err != nil {
+		log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be read")
+	} else {
+		err = json.Unmarshal(frBytes, &registry)
+		if err != nil {
+			log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be unmarshaled, ignoring")
 		} else {
-			log.WithField("fileregistry", fileRegistry).Debug("Using fileregistry.json")
+			log.WithField("path", registry).Debug("Using registry file")
 		}
 	}
 
 	ft := fileTail{
-		pattern:      pattern,
-		follow:       follow,
-		fileRegistry: fileRegistry,
-		lC:           make(chan string),
-		ctx:          ctx,
+		pattern:        pattern,
+		follow:         follow,
+		registryDBFile: registryDBFile,
+		registry:       registry,
+		lC:             make(chan string),
+		ctx:            ctx,
 	}
 
 	ft.watchFiles()
@@ -74,13 +92,13 @@ func (ft *fileTail) ReadLine() (string, error) {
 }
 
 func (ft *fileTail) saveRegistry() {
-	frBytes, err := json.Marshal(ft.fileRegistry)
+	frBytes, err := json.Marshal(ft.registry)
 	if err != nil {
-		log.WithError(err).Error("Could not marshal file registry")
+		log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
 	} else {
 		err = os.WriteFile("fileregistry.json", frBytes, 0666)
 		if err != nil {
-			log.WithError(err).Error("Could not write file registry")
+			log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
 		}
 	}
 }
@@ -173,12 +191,12 @@ nextFile:
 		}
 
 		// file already monitored, move to new registry
-		for k, v := range ft.fileRegistry {
+		for k, v := range ft.registry {
 			// check file as already monitored in current app run
 			if v.fi != nil && os.SameFile(*v.fi, fi) {
 				log.WithField("file", k).Debug("Same file detected")
 				newFileRegistry[m] = fileWatch{fi: &fi, t: v.t, Fm: v.Fm}
-				delete(ft.fileRegistry, k)
+				delete(ft.registry, k)
 				continue nextFile
 			}
 
@@ -202,7 +220,7 @@ nextFile:
 					}
 
 					newFileRegistry[m] = fileWatch{fi: &fi, t: t, Fm: v.Fm}
-					delete(ft.fileRegistry, k)
+					delete(ft.registry, k)
 					newFiles = append(newFiles, newFileRegistry[m])
 					continue nextFile
 				} else {
@@ -223,13 +241,13 @@ nextFile:
 		log.WithField("file", m).Debug("Monitoring new file")
 	}
 
-	for _, v := range ft.fileRegistry {
+	for _, v := range ft.registry {
 		if v.t != nil {
 			log.WithField("file", v.t.Filename).Info("Closing tail for removed files")
 			v.t.StopAtEOF()
 		}
 	}
 
-	ft.fileRegistry = newFileRegistry
+	ft.registry = newFileRegistry
 	return newFiles, nil
 }

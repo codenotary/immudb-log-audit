@@ -68,7 +68,9 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		cancel()
 	}()
 
-	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow)
+	flagregistryDBDir, _ := cmd.Flags().GetString("file-registry-dir")
+
+	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagregistryDBDir)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
@@ -83,4 +85,5 @@ func tailFile(cmd *cobra.Command, args []string) error {
 
 func init() {
 	tailCmd.AddCommand(tailFileCmd)
+	tailFileCmd.Flags().String("file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
 }

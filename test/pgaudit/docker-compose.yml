@@ -23,7 +23,7 @@ services:
       - 'POSTGRESQL_PGAUDIT_LOG=ALL'
       # Configure postgresql to store data in /logs folder in json format, every minute. There will be log file per each minute, rotating every 60 minutes. 
       # It can be changed to rotate per hour, day etc..
-      - "POSTGRESQL_EXTRA_FLAGS=-c log_destination=jsonlog -c logging_collector=true -c log_directory=/logs -c log_filename=posgresql-%M.json -c log_rotation_age=1 -c log_truncate_on_rotation=on"
+      - "POSTGRESQL_EXTRA_FLAGS=-c log_destination=jsonlog -c logging_collector=true -c log_directory=/logs -c log_filename=posgresql-%M -c log_rotation_age=1 -c log_truncate_on_rotation=on"
     depends_on:
       - volume_init
 
@@ -46,7 +46,7 @@ services:
   # Send audit logs to immudb
   immudb-log-audit:
     image: immudb-log-audit:local
-    command: tail file psqljson "/logs/*" --follow --log-level trace --immudb-host immudb
+    command: tail file psqljson "/logs/*" --follow --file-registry-dir=/data --log-level trace --immudb-host immudb
     volumes: 
       - 'immudb-log-audit_data:/data'
       - 'postgresql_logs:/logs'

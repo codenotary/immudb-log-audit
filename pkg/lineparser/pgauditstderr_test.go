@@ -35,8 +35,8 @@ func TestPgauditParse(t *testing.T) {
 		{
 			line: `2023-02-03 21:15:01.759 GMT [294] LOG:  AUDIT: SESSION,1,1,WRITE,INSERT,,,"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('c06984ff-ea4b-44e1-a7ff-d08376180614', NOW(), 'user0', 1, '127.0.0.1', 'some context')",<not logged>`,
 			expected: &pgAuditStderrEntry{
-				Timestamp:       time.Now(),
-				ServerTimestamp: time.Date(2023, 02, 03, 21, 15, 1, 759*1000000, func() *time.Location { l, _ := time.LoadLocation("GMT"); return l }()),
+				Timestamp:       time.Date(2023, 02, 03, 21, 15, 1, 759*1000000, func() *time.Location { l, _ := time.LoadLocation("GMT"); return l }()),
+				ServerTimestamp: time.Now(),
 				pgAuditEntry: pgAuditEntry{
 					AuditType:      "SESSION",
 					StatementID:    1,
@@ -74,7 +74,7 @@ func TestPgauditParse(t *testing.T) {
 		assert.Equal(t, td.expected.AuditType, entry.AuditType)
 		assert.Equal(t, td.expected.Class, entry.Class)
 		assert.Equal(t, td.expected.Command, entry.Command)
-		assert.WithinDuration(t, td.expected.ServerTimestamp, entry.ServerTimestamp, 0)
+		assert.WithinDuration(t, td.expected.ServerTimestamp, entry.ServerTimestamp, 1*time.Millisecond)
 		assert.WithinDuration(t, td.expected.Timestamp, entry.Timestamp, 100*time.Millisecond)
 		assert.Equal(t, td.expected.ObjectName, td.expected.ObjectName)
 		assert.Equal(t, td.expected.ObjectType, td.expected.ObjectType)

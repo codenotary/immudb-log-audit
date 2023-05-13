@@ -45,6 +45,10 @@ func (pgt *pgauditTimestamp) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
+func (pgt pgauditTimestamp) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("%q", pgt.Format("2006-01-02 15:04:05.000 MST"))), nil
+}
+
 type pgAuditJSONLogEntry struct {
 	pgAuditEntry
 	UID             string           `json:"uid"`
@@ -73,7 +77,7 @@ func (p *pgAuditJSONLogLineParser) Parse(line string) ([]byte, error) {
 		return nil, errors.New("not a pgaudit line, missing 'messagae' field")
 	}
 
-	pgae, err := toPgauditEntry(r.String())
+	pgae, err := toPgauditEntry(strings.TrimSpace(strings.TrimLeft(r.String(), "AUDIT:")))
 	if err != nil {
 		return nil, fmt.Errorf("not a pgaudit line, %w", err)
 	}
