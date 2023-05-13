@@ -96,7 +96,7 @@ func (ft *fileTail) saveRegistry() {
 	if err != nil {
 		log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
 	} else {
-		err = os.WriteFile("fileregistry.json", frBytes, 0666)
+		err = os.WriteFile(ft.registryDBFile, frBytes, 0666)
 		if err != nil {
 			log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
 		}
