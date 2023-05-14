@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,11 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
@@ -55,15 +59,31 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
-	fileTail, err := source.NewFileTail(args[1], flagFollow)
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		<-signals
+		cancel()
+	}()
+
+	flagregistryDBDir, _ := cmd.Flags().GetString("file-registry-dir")
+
+	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagregistryDBDir)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
 
 	s := service.NewAuditService(fileTail, lp, jsonRepository)
-	return s.Run()
+
+	err = s.Run()
+	signal.Stop(signals)
+	close(signals)
+	return err
 }
 
 func init() {
 	tailCmd.AddCommand(tailFileCmd)
+	tailFileCmd.Flags().String("file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
 }

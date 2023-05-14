@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,8 +48,11 @@ func createKV(cmd *cobra.Command, args []string) error {
 
 	flagIndexes, _ := cmd.Flags().GetStringSlice("indexes")
 	if flagParser == "pgaudit" {
-		flagIndexes = []string{"statement_id", "log_timestamp", "timestamp", "audit_type", "class", "command"}
+		flagIndexes = []string{"uid", "statement_id", "substatement_id", "server_timestamp", "timestamp", "audit_type", "class", "command"}
 		log.WithField("indexes", flagIndexes).Info("Using default indexes for pgaudit parser")
+	} else if flagParser == "pgauditjsonlog" {
+		flagIndexes = []string{"uid", "user", "dbname", "session_id", "statement_id", "substatement_id", "server_timestamp", "timestamp", "audit_type", "class", "command"}
+		log.WithField("indexes", flagIndexes).Info("Using default indexes for pgauditjsonlog parser")
 	} else if flagParser == "wrap" {
 		flagIndexes = []string{"uid", "timestamp"}
 		log.WithField("indexes", flagIndexes).Info("Using default indexes for wrap parser")

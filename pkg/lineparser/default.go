@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@ limitations under the License.
 
 package lineparser
 
-type DefaultLineParser struct {
+type defaultLineParser struct {
 }
 
-func NewDefaultLineParser() *DefaultLineParser {
-	return &DefaultLineParser{}
+func NewDefaultLineParser() *defaultLineParser {
+	return &defaultLineParser{}
 }
 
-func (*DefaultLineParser) Parse(line string) ([]byte, error) {
+func (*defaultLineParser) Parse(line string) ([]byte, error) {
 	return []byte(line), nil
 }

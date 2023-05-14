@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -99,10 +99,17 @@ func (jr *JsonSQLRepository) WriteBytes(jBytes []byte) (uint64, error) {
 
 	params := map[string]interface{}{"__value__": jBytes}
 	cSlice := []string{}
+	command := "UPSERT"
 	for _, c := range jr.columns {
 		if c.name == "__value__" {
 			continue
 		}
+
+		if c.cType == "INTEGER AUTO_INCREMENT" {
+			command = "INSERT"
+			continue
+		}
+
 		cSlice = append(cSlice, c.name)
 		gjr := gjsonObject.Get(c.name)
 		if !gjr.Exists() {
@@ -121,14 +128,15 @@ func (jr *JsonSQLRepository) WriteBytes(jBytes []byte) (uint64, error) {
 	}
 
 	sb := strings.Builder{}
-	sb.WriteString("UPSERT INTO ")
+	sb.WriteString(command)
+	sb.WriteString(" INTO ")
 	sb.WriteString(jr.collection)
 	sb.WriteString(" (\"")
 	sb.WriteString(strings.Join(cSlice, "\",\""))
 	sb.WriteString("\", \"__value__\") VALUES (@")
 	sb.WriteString(strings.Join(cSlice, ",@"))
 	sb.WriteString(",@__value__);")
-	log.WithField("sql", sb.String()).WithField("collection", jr.collection).Trace("inserting row")
+	log.WithField("sql", sb.String()).WithField("collection", jr.collection).Trace("Inserting row")
 	res, err := jr.client.SQLExec(context.TODO(), sb.String(), params)
 	if err != nil {
 		return 0, fmt.Errorf("could not insert into collection, %w", err)
@@ -152,21 +160,22 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 	page := fmt.Sprintf(" ORDER BY \"%s\" DESC LIMIT 999", jr.columns[0].name)
 	ret := [][]byte{}
 	for {
-		log.WithField("sql", sb.String()+page).WithField("collection", jr.collection).Info("reading")
+		log.WithField("sql", sb.String()+page).WithField("collection", jr.collection).Info("Reading")
 		res, err := jr.client.SQLQuery(context.TODO(), sb.String()+page, nil, true)
 		if err != nil {
 			return nil, err
-		}
-
-		if len(res.Rows) < 999 {
-			break
 		}
 
 		for _, r := range res.Rows {
 			ret = append(ret, r.Values[1].GetBs())
 		}
 
-		if jr.columns[0].cType == "INTEGER" {
+		if len(res.Rows) < 999 {
+			log.WithField("rows_count", len(res.Rows)).WithField("rows_total", len(ret)).Trace("No more pages")
+			break
+		}
+
+		if jr.columns[0].cType == "INTEGER" || jr.columns[0].cType == "INTEGER AUTO_INCREMENT" {
 			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetN(), jr.columns[0].name)
 		} else if strings.HasPrefix(jr.columns[0].cType, "VARCHAR") {
 			page = fmt.Sprintf(" \"%s\" < '%s' ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetS(), jr.columns[0].name)
@@ -178,6 +187,8 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 
 		if !strings.Contains(strings.ToLower(sb.String()), "where") {
 			page = " WHERE " + page
+		} else {
+			page = " AND " + page
 		}
 	}
 

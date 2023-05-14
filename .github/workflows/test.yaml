@@ -1,0 +1,29 @@
+name: Tests
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "**"
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Cleanup build folder"
+        run: |
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - uses: actions/checkout@v3
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: make test

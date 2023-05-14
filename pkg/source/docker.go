@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,32 +26,32 @@ import (
 	"github.com/docker/docker/client"
 )
 
-type DockerTail struct {
+type dockerTail struct {
 	reader  io.ReadCloser
 	scanner *bufio.Scanner
 }
 
-func NewDockerTail(container string, follow bool, since string, showStdout bool, showStderr bool) (*DockerTail, error) {
+func NewDockerTail(ctx context.Context, container string, follow bool, since string, showStdout bool, showStderr bool) (*dockerTail, error) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		return nil, fmt.Errorf("could not create docker client, %w", err)
 	}
 
-	cli.NegotiateAPIVersion(context.TODO())
+	cli.NegotiateAPIVersion(ctx)
 
-	reader, err := cli.ContainerLogs(context.TODO(), container, types.ContainerLogsOptions{Follow: follow, Since: since, ShowStdout: showStdout, ShowStderr: showStderr})
+	reader, err := cli.ContainerLogs(ctx, container, types.ContainerLogsOptions{Follow: follow, Since: since, ShowStdout: showStdout, ShowStderr: showStderr})
 	if err != nil {
 		return nil, fmt.Errorf("could not create docker logs reader: %w", err)
 	}
 	scanner := bufio.NewScanner(reader)
 
-	return &DockerTail{
+	return &dockerTail{
 		reader:  reader,
 		scanner: scanner,
 	}, nil
 }
 
-func (dt *DockerTail) ReadLine() (string, error) {
+func (dt *dockerTail) ReadLine() (string, error) {
 	if dt.scanner.Scan() {
 		b := dt.scanner.Bytes()
 

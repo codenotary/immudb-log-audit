@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Codenotary Inc. All rights reserved.
+Copyright 2023 Codenotary Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,19 +20,37 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/codenotary/immudb/pkg/client"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
+var (
+	Version   string
+	Commit    string
+	BuildTime string
+)
+
 var immuCli client.ImmuClient
+
+func version() string {
+	return fmt.Sprintf("%s, commit: %s, build time: %s",
+		Version, Commit,
+		time.Unix(func() int64 {
+			i, _ := strconv.ParseInt(BuildTime, 10, 64)
+			return i
+		}(), 0))
+}
 
 var rootCmd = &cobra.Command{
 	Use:               "immudb-log-audit",
 	Short:             "Store and audit your data in immudb",
 	RunE:              root,
 	PersistentPostRun: rootPost,
+	Version:           version(),
 }
 
 var usageTemplate = `Usage:{{if .Runnable}}
@@ -65,7 +83,6 @@ func init() {
 	rootCmd.PersistentFlags().String("immudb-user", "immudb", "immudb user")
 	rootCmd.PersistentFlags().String("immudb-password", "immudb", "immudb user password")
 	rootCmd.PersistentFlags().String("log-level", "info", "Log level (trace, debug, info, warn, error)")
-
 }
 
 func root(cmd *cobra.Command, args []string) error {

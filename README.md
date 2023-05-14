@@ -15,6 +15,23 @@ In addition, immudb-log-audit provides two predefined log line parsers:
 - pgaudit, which transforms pgaudit audit logs into json representation and stores them in immudb. 
 - wrap, which accepts any log line and wraps it into json adding uid and timestamp. 
 
+## Installation
+
+### Building from source
+
+To build immudb-log-audit binary, clone this repository and run
+
+```bash
+make
+```
+
+### Building docker image
+
+To build immudb-log-audit docker image, clone this repository and run
+
+```bash
+make docker
+```
 
 ## Overview
 immudb-log-audit uses either immudb key-value or SQL to store the data. In general, it transforms selected fields from JSON into key-values or SQL entries enabling easy and automated storage with later retrieval and audit of data. 
@@ -34,7 +51,7 @@ Similarly, SQL collection can be created. The main difference is that in this ca
 ./immudb-log-audit create sql mycollection --columns "field1=INTEGER,field2=VARCHAR[256],field3=BLOB" --primary-key "field1,field2"
 ```
 
-After creating a collection, data can be easily pushed using tail subcommand. immudb-log-audit will retrieve collection definition, so there is no difference if key-value or sql was used. Currently supported sources are file and docker container. Both can be used with --follow option, which in case of files will also handle rotation.
+After creating a collection, data can be easily pushed using tail subcommand. immudb-log-audit will retrieve collection definition, so there is no difference if key-value or sql was used. Currently supported sources are file and docker container. Both can be used with --follow option, which in case of files will also handle rotation and automatically track monitored files to minimize possibility of logs duplication. 
 
 ```bash
 ./immudb-log-audit tail file mycollection path/to/your/file --follow
@@ -82,23 +99,59 @@ For SQL, the audit accepts temporal query statement and returns matching values 
 ## Storing pgaudit logs in immudb
 [pgaudit](https://github.com/pgaudit/pgaudit) is PostgreSQL extension that enables audit logs for the database. Any kind of audit logs should be stored in secure location. immudb is fullfiling this requirement with its immutable and tamper proof features.
 
-immudb-log-audit has simple pgaudit log line parser. It assumes that each log line has log_line_prefix of '%m [%p] '.
+immudb-log-audit can parse PostgreSQL pgaudit logs in following formats: 
+
+- Stderr log parser. It assumes that each log line has log_line_prefix of '%m [%p] '.
+- Jsonlog log parser. 
+
+For more information about those formats, visit [PostgreSQL logging documentation](https://www.postgresql.org/docs/current/runtime-config-logging.html).
 
 To start, you need to have an PostgreSQL running with pgaudit extension enabled. As the example, [bitnami postgresql](https://hub.docker.com/r/bitnami/postgresql) which already hase pgaudi extension can be used. 
 
-The example pgaudi log line looks like:
+There is also [docker-compose end-to-end example](./examples/pgaudit) in this repository.
+
+### stderr log format
+
+The example pgaudit stderr log line looks like:
 ```
 2023-02-03 21:15:01.851 GMT [294] LOG:  AUDIT: SESSION,61,1,WRITE,INSERT,,,"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('134ff2d5-2db4-44d2-9f67-9c7f5ed64967', NOW(), 'user60', 1, '127.0.0.1', 'some context')",<not logged>
 ```
 
-pgaudit parser will convert each log line into following json
+pgaudit parser will convert each stderr log line into following json
 ```json
-{"timestamp":"2023-03-16T08:58:44.033611299Z","log_timestamp":"2023-03-02T21:15:01.851Z","audit_type":"SESSION","statement_id":61,"substatement_id":1,"class":"WRITE","command":"INSERT","statement":"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('134ff2d5-2db4-44d2-9f67-9c7f5ed64967', NOW(), 'user60', 1, '127.0.0.1', 'some context')","parameter":"\u003cnot logged\u003e"}
+{"uid": "234aa2d5-2db4-44d2-9f67-9c7f5eda4967", "timestamp":"2023-03-16T08:58:44.033611299Z","log_timestamp":"2023-03-02T21:15:01.851Z","audit_type":"SESSION","statement_id":61,"substatement_id":1,"class":"WRITE","command":"INSERT","statement":"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('134ff2d5-2db4-44d2-9f67-9c7f5ed64967', NOW(), 'user60', 1, '127.0.0.1', 'some context')","parameter":"\u003cnot logged\u003e"}
 ```
 
-The indexed fields for pgaudit are
+The indexed fields for stderr are
 ```
-statement_id log_timestamp timestamp audit_type class command
+uid, statement_id, substatement_id, server_timestamp, timestamp, audit_type, class, command
+```
+
+With primary key as
+```
+uid
+```
+
+### jsonlog log format
+
+The example pgaudit jsonlog log line looks like:
+```json
+{"timestamp":"2023-05-13 21:09:08.502 GMT","user":"postgres","dbname":"postgres","pid":138,"remote_host":"172.22.0.1","remote_port":58300,"session_id":"645ffc74.8a","line_num":1,"ps":"CREATE TABLE","session_start":"2023-05-13 21:09:08 GMT","vxid":"3/44","txid":736,"error_severity":"LOG","message":"AUDIT: SESSION,1,1,DDL,CREATE TABLE,,,\"create table if not exists audit_trail (id VARCHAR, ts TIMESTAMP, usr VARCHAR, action INTEGER, sourceip VARCHAR, context VARCHAR, PRIMARY KEY(id));\",<not logged>","backend_type":"client backend","query_id":0}
+```
+
+pgaudit parser will convert each jsonlog log line into following json
+```json
+{"audit_type":"SESSION","statement_id":1,"substatement_id":1,"class":"DDL","command":"CREATE TABLE","statement":"create table if not exists audit_trail (id VARCHAR, ts TIMESTAMP, usr VARCHAR, action INTEGER, sourceip VARCHAR, context VARCHAR, PRIMARY KEY(id));","parameter":"\u003cnot logged\u003e","uid":"f233afdd-304b-44e8-90ee-a7757b46c49f","server_timestamp":"2023-05-13T22:35:07.666574128Z","timestamp":"2023-05-13 21:09:08.502 GMT","user":"postgres","dbname":"postgres","remote_host":"172.22.0.1","remote_port":58300,"session_id":"645ffc74.8a","line_num":1,"ps":"CREATE TABLE","session_start":"2023-05-13 21:09:08.000 GMT"}
+```
+
+The indexed fields for jsonlog are
+```
+uid, user, dbname, session_id, statement_id, substatement_id, server_timestamp, timestamp, audit_type, class, command
+```
+
+With primary key as
+```
+uid
 ```
 
 ### How to set up
@@ -114,7 +167,11 @@ Note: you can execute ```go run test/utils/psql.go``` to generate audit entries.
 Create immudb-log-audit collection for logs
 
 ```bash
+# stderr log format
 ./immudb-log-audit create kv pgaudit --parser pgaudit
+
+# or jsonlog log format
+./immudb-log-audit create kv pgaudit --parser pgauditpgauditjsonlog
 ```
 
 Tail PostgreSQL docker container logs
@@ -135,7 +192,7 @@ Read
 Audit
 
 ```bash
-./immudb-log-audit audit kv pgaudit 100
+./immudb-log-audit audit kv pgaudit f233afdd-304b-44e8-90ee-a7757b46c49f
 ```
 
 Note: audit is done using primary field value which is unique, in case of pgaudit it is statement_id value.
