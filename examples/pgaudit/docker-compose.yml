@@ -53,7 +53,7 @@ services:
   # Create colleciton in immudb
   immudb-log-audit-init:
     image: codenotary/immudb-log-audit
-    command: create kv psqljson --parser pgauditjsonlog --log-level trace --immudb-host immudb
+    command: create kv pgaudit --parser pgauditjsonlog --log-level trace --immudb-host immudb
     depends_on:
       - postgresql
       - immudb
@@ -61,7 +61,7 @@ services:
   # Send audit logs to immudb
   immudb-log-audit:
     image: codenotary/immudb-log-audit
-    command: tail file psqljson "/logs/*" --follow --file-registry-dir=/data --log-level trace --immudb-host immudb
+    command: tail file pgaudit "/logs/*" --follow --file-registry-dir=/data --log-level trace --immudb-host immudb
     volumes: 
       - 'immudb-log-audit_data:/data'
       - 'postgresql_logs:/logs'

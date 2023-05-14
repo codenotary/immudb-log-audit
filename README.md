@@ -108,11 +108,10 @@ For more information about those formats, visit [PostgreSQL logging documentatio
 
 To start, you need to have an PostgreSQL running with pgaudit extension enabled. As the example, [bitnami postgresql](https://hub.docker.com/r/bitnami/postgresql) which already hase pgaudi extension can be used. 
 
-There is also [docker-compose end-to-end example](./examples/pgaudit) in this repository.
-
 ### stderr log format
 
 The example pgaudit stderr log line looks like:
+
 ```
 2023-02-03 21:15:01.851 GMT [294] LOG:  AUDIT: SESSION,61,1,WRITE,INSERT,,,"insert into audit_trail(id, ts, usr, action, sourceip, context) VALUES ('134ff2d5-2db4-44d2-9f67-9c7f5ed64967', NOW(), 'user60', 1, '127.0.0.1', 'some context')",<not logged>
 ```
@@ -156,22 +155,22 @@ uid
 
 ### How to set up
 
-You can use [docker-compose.yml](test/pgaudit/docker-compose.yml) from this repository as an example.
+You can use [docker-compose end-to-end example](./examples/pgaudit) from this repository.
 
 ```bash
-docker-compose up -d -f test/pgaudit/docker-compose.yml
+docker-compose up -d -f examples/pgaudit/docker-compose.yml
 ```
 
 Note: you can execute ```go run test/utils/psql.go``` to generate audit entries.
 
-Create immudb-log-audit collection for logs
+To manually create immudb-log-audit collection for pgaudit logs
 
 ```bash
 # stderr log format
 ./immudb-log-audit create kv pgaudit --parser pgaudit
 
 # or jsonlog log format
-./immudb-log-audit create kv pgaudit --parser pgauditpgauditjsonlog
+./immudb-log-audit create kv pgaudit --parser pgauditjsonlog
 ```
 
 Tail PostgreSQL docker container logs
