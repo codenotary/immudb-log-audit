@@ -158,7 +158,7 @@ uid
 You can use [docker-compose end-to-end example](./examples/pgaudit) from this repository.
 
 ```bash
-docker-compose up -d -f examples/pgaudit/docker-compose.yml
+docker-compose -f examples/pgaudit/docker-compose.yml up
 ```
 
 Note: you can execute ```go run test/utils/psql.go``` to generate audit entries.
