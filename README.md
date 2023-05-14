@@ -15,6 +15,23 @@ In addition, immudb-log-audit provides two predefined log line parsers:
 - pgaudit, which transforms pgaudit audit logs into json representation and stores them in immudb. 
 - wrap, which accepts any log line and wraps it into json adding uid and timestamp. 
 
+## Installation
+
+### Building from source
+
+To build immudb-log-audit binary, clone this repository and run
+
+```bash
+make
+```
+
+### Building docker image
+
+To build immudb-log-audit docker image, clone this repository and run
+
+```bash
+make docker
+```
 
 ## Overview
 immudb-log-audit uses either immudb key-value or SQL to store the data. In general, it transforms selected fields from JSON into key-values or SQL entries enabling easy and automated storage with later retrieval and audit of data. 
@@ -34,7 +51,7 @@ Similarly, SQL collection can be created. The main difference is that in this ca
 ./immudb-log-audit create sql mycollection --columns "field1=INTEGER,field2=VARCHAR[256],field3=BLOB" --primary-key "field1,field2"
 ```
 
-After creating a collection, data can be easily pushed using tail subcommand. immudb-log-audit will retrieve collection definition, so there is no difference if key-value or sql was used. Currently supported sources are file and docker container. Both can be used with --follow option, which in case of files will also handle rotation.
+After creating a collection, data can be easily pushed using tail subcommand. immudb-log-audit will retrieve collection definition, so there is no difference if key-value or sql was used. Currently supported sources are file and docker container. Both can be used with --follow option, which in case of files will also handle rotation and automatically track monitored files to minimize possibility of logs duplication. 
 
 ```bash
 ./immudb-log-audit tail file mycollection path/to/your/file --follow
@@ -91,7 +108,7 @@ For more information about those formats, visit [PostgreSQL logging documentatio
 
 To start, you need to have an PostgreSQL running with pgaudit extension enabled. As the example, [bitnami postgresql](https://hub.docker.com/r/bitnami/postgresql) which already hase pgaudi extension can be used. 
 
-There is also [docker-compose end-to-end example](./examples/pgaudit/docker-compose.yml) in this repository.
+There is also [docker-compose end-to-end example](./examples/pgaudit) in this repository.
 
 ### stderr log format
 

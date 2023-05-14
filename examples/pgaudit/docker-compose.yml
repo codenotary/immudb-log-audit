@@ -1,8 +1,22 @@
+# Copyright 2023 Codenotary Inc. All rights reserved.
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+# 	http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 version: '2'
 
 services:
   # Peeded to set up proper permissions for non root user in bitnami/postgresql
-  volume_init:
+  volume-init:
     image: alpine
     volumes: 
       - 'postgresql_logs:/logs'
@@ -21,14 +35,15 @@ services:
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'POSTGRESQL_PGAUDIT_LOG=ALL'
-      # Configure postgresql to store data in /logs folder in json format, every minute. There will be log file per each minute, rotating every 60 minutes. 
+      # Configure postgresql to store data in /logs folder in json format, every minute. 
+      # There will be log file per each minute, rotating every 60 minutes. 
       # It can be changed to rotate per hour, day etc..
       - "POSTGRESQL_EXTRA_FLAGS=-c log_destination=jsonlog -c logging_collector=true -c log_directory=/logs -c log_filename=posgresql-%M -c log_rotation_age=1 -c log_truncate_on_rotation=on"
     depends_on:
-      - volume_init
+      - volume-init
 
   immudb:
-    image: codenotary/immudb:local
+    image: codenotary/immudb
     ports:
       - '3322:3322'
       - '8080:8080'
@@ -37,7 +52,7 @@ services:
 
   # Create colleciton in immudb
   immudb-log-audit-init:
-    image: immudb-log-audit:local
+    image: codenotary/immudb-log-audit
     command: create kv psqljson --parser pgauditjsonlog --log-level trace --immudb-host immudb
     depends_on:
       - postgresql
@@ -45,7 +60,7 @@ services:
 
   # Send audit logs to immudb
   immudb-log-audit:
-    image: immudb-log-audit:local
+    image: codenotary/immudb-log-audit
     command: tail file psqljson "/logs/*" --follow --file-registry-dir=/data --log-level trace --immudb-host immudb
     volumes: 
       - 'immudb-log-audit_data:/data'
