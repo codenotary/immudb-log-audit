@@ -32,12 +32,7 @@ immudb-log-audit:
 
 .PHONY: test
 test:
-	$(GO) vet ./...
-	$(GO) get golang.org/x/tools/cmd/cover
-	$(GO) get github.com/mattn/goveralls
-	$(GO) get -u github.com/ory/go-acc
-	go-acc ./... --ignore test || true
-	$(GO) tool cover -func=coverage.txt | grep total | grep -Eo '[0-9]+\.[0-9]+'
+	$(GO) test -coverprofile cover.txt -v ./...
 
 .PHONY: docker push
 docker:
