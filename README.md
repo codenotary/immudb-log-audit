@@ -161,7 +161,7 @@ You can use [docker-compose end-to-end example](./examples/pgaudit) from this re
 docker-compose -f examples/pgaudit/docker-compose.yml up
 ```
 
-Note: you can execute ```go run test/utils/psql.go``` to generate audit entries.
+Note: you can execute ```go run test/pgaudit/utils/psql.go``` to generate audit entries.
 
 To manually create immudb-log-audit collection for pgaudit logs
 
