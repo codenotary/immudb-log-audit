@@ -42,21 +42,27 @@ func NewJsonKVRepository(cli immudb.ImmuClient, collection string) (*JsonKVRepos
 	}
 
 	// read collection definition
-	cfg, err := NewConfigs(cli).Read(collection)
+	b, err := NewConfigs(cli).ReadConfig(collection)
 	if err != nil {
 		return nil, fmt.Errorf("collection is missing definition, %w", err)
 	}
 
-	log.WithField("indexes", cfg.Indexes).Info("Indexes from immudb")
+	var indexes []string
+	err = json.Unmarshal(b, &indexes)
+	if err != nil {
+		return nil, fmt.Errorf("invalid collection configuration: %w", err)
+	}
+
+	log.WithField("indexes", indexes).Info("Indexes from immudb")
 
 	return &JsonKVRepository{
 		client:      cli,
 		collection:  collection,
-		indexedKeys: cfg.Indexes,
+		indexedKeys: indexes,
 	}, nil
 }
 
-func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, parser string, indexedKeys []string) error {
+func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, indexedKeys []string) error {
 	b, err := json.Marshal(indexedKeys)
 	if err != nil {
 		return fmt.Errorf("could not marshal indexes definition, %w", err)
@@ -68,7 +74,7 @@ func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, parser stri
 	}
 
 	cfgs := NewConfigs(cli)
-	err = cfgs.Write(collection, Config{Parser: parser, Type: "kv", Indexes: indexedKeys})
+	err = cfgs.WriteConfig(collection, b)
 	if err != nil {
 		return fmt.Errorf("could not store collection config, %w", err)
 	}

@@ -67,7 +67,11 @@ func createSQL(cmd *cobra.Command, args []string) error {
 		return errors.New("at least one column and primary key needs to be specified")
 	}
 
-	immudb.SetupJsonSQLRepository(immuCli, args[0], flagParser, strings.Join(primaryKey, ","), flagColumns)
+	err = immudb.NewConfigs(immuCli).WriteTypeParser("sql", args[0], flagParser)
+	if err != nil {
+		return fmt.Errorf("could not create json repository parser config, %w", err)
+	}
+	immudb.SetupJsonSQLRepository(immuCli, args[0], strings.Join(primaryKey, ","), flagColumns)
 
 	return nil
 }

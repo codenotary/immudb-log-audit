@@ -29,15 +29,16 @@ import (
 	immudb "github.com/codenotary/immudb/pkg/client"
 )
 
-type column struct {
-	name  string
-	cType string
+type sqlcolumn struct {
+	Name    string
+	CType   string
+	Primary bool
 }
 
 type JsonSQLRepository struct {
 	client     immudb.ImmuClient
 	collection string
-	columns    []column
+	columns    []sqlcolumn
 }
 
 func NewJsonSQLRepository(cli immudb.ImmuClient, collection string) (*JsonSQLRepository, error) {
@@ -56,19 +57,15 @@ func NewJsonSQLRepository(cli immudb.ImmuClient, collection string) (*JsonSQLRep
 		return nil, errors.New("collection does not exist")
 	}
 
-	cfg, err := NewConfigs(cli).Read(collection)
+	b, err := NewConfigs(cli).ReadConfig(collection)
 	if err != nil {
 		return nil, fmt.Errorf("collection is missing definition, %w", err)
 	}
 
-	columns := []column{}
-	for _, c := range cfg.Indexes {
-		splitted := strings.Split(c, "=")
-		if len(splitted) != 2 {
-			return nil, fmt.Errorf("invalid index definition, %s", c)
-		}
-
-		columns = append(columns, column{name: splitted[0], cType: splitted[1]})
+	var columns []sqlcolumn
+	err = json.Unmarshal(b, &columns)
+	if err != nil {
+		return nil, fmt.Errorf("could not read collection config: %w", err)
 	}
 
 	_, err = tx.Commit(context.TODO())
@@ -101,29 +98,33 @@ func (jr *JsonSQLRepository) WriteBytes(jBytes []byte) (uint64, error) {
 	cSlice := []string{}
 	command := "UPSERT"
 	for _, c := range jr.columns {
-		if c.name == "__value__" {
+		if c.Name == "__value__" {
 			continue
 		}
 
-		if c.cType == "INTEGER AUTO_INCREMENT" {
+		if c.CType == "INTEGER AUTO_INCREMENT" {
 			command = "INSERT"
 			continue
 		}
 
-		cSlice = append(cSlice, c.name)
-		gjr := gjsonObject.Get(c.name)
-		if !gjr.Exists() {
-			return 0, fmt.Errorf("missing field %s in object", c)
+		cSlice = append(cSlice, c.Name)
+		gjr := gjsonObject.Get(c.Name)
+		if c.Primary && !gjr.Exists() {
+			return 0, fmt.Errorf("missing field %s in object", c.Name)
 		}
 
-		if c.cType == "INTEGER" {
-			params[c.name] = gjr.Int()
-		} else if strings.HasPrefix(c.cType, "VARCHAR") {
-			params[c.name] = gjr.String()
-		} else if c.cType == "TIMESTAMP" {
-			params[c.name] = gjr.Time()
+		if c.CType == "INTEGER" {
+			params[c.Name] = gjr.Int()
+		} else if strings.HasPrefix(c.CType, "VARCHAR") {
+			params[c.Name] = gjr.String()
+		} else if c.CType == "TIMESTAMP" {
+			params[c.Name] = gjr.Time()
+		} else if c.CType == "BOOLEAN" {
+			params[c.Name] = gjr.Bool()
+		} else if c.CType == "FLOAT" {
+			params[c.Name] = gjr.Float()
 		} else {
-			return 0, fmt.Errorf("unsupported field type %s", c.cType)
+			return 0, fmt.Errorf("unsupported field type %s", c.CType)
 		}
 	}
 
@@ -149,7 +150,7 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 	// intentionally accepting query as is for now.
 	sb := strings.Builder{}
 	sb.WriteString("SELECT \"")
-	sb.WriteString(jr.columns[0].name)
+	sb.WriteString(jr.columns[0].Name)
 	sb.WriteString("\",__value__ FROM ")
 	sb.WriteString(jr.collection)
 	if query != "" {
@@ -157,7 +158,7 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 		sb.WriteString(query)
 	}
 
-	page := fmt.Sprintf(" ORDER BY \"%s\" DESC LIMIT 999", jr.columns[0].name)
+	page := fmt.Sprintf(" ORDER BY \"%s\" DESC LIMIT 999", jr.columns[0].Name)
 	ret := [][]byte{}
 	for {
 		log.WithField("sql", sb.String()+page).WithField("collection", jr.collection).Info("Reading")
@@ -175,14 +176,18 @@ func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
 			break
 		}
 
-		if jr.columns[0].cType == "INTEGER" || jr.columns[0].cType == "INTEGER AUTO_INCREMENT" {
-			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetN(), jr.columns[0].name)
-		} else if strings.HasPrefix(jr.columns[0].cType, "VARCHAR") {
-			page = fmt.Sprintf(" \"%s\" < '%s' ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetS(), jr.columns[0].name)
-		} else if jr.columns[0].cType == "TIMESTAMP" {
-			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetTs(), jr.columns[0].name)
+		if jr.columns[0].CType == "INTEGER" || jr.columns[0].CType == "INTEGER AUTO_INCREMENT" {
+			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetN(), jr.columns[0].Name)
+		} else if strings.HasPrefix(jr.columns[0].CType, "VARCHAR") {
+			page = fmt.Sprintf(" \"%s\" < '%s' ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetS(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "TIMESTAMP" {
+			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetTs(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "BOOLEAN" {
+			page = fmt.Sprintf(" \"%s\" < %t ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetB(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "FLOAT" {
+			page = fmt.Sprintf(" \"%s\" < %f ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetF(), jr.columns[0].Name)
 		} else {
-			return nil, fmt.Errorf("unsupported field type %s", jr.columns[0].cType)
+			return nil, fmt.Errorf("unsupported field type %s", jr.columns[0].CType)
 		}
 
 		if !strings.Contains(strings.ToLower(sb.String()), "where") {
@@ -199,7 +204,7 @@ func (jr *JsonSQLRepository) History(query string) ([][]byte, error) {
 	// intentionally accepting query as is for now.
 	sb := strings.Builder{}
 	sb.WriteString("SELECT \"")
-	sb.WriteString(jr.columns[0].name)
+	sb.WriteString(jr.columns[0].Name)
 	sb.WriteString("\",__value__ FROM ")
 	sb.WriteString(jr.collection)
 	sb.WriteString(" ")
@@ -211,7 +216,7 @@ func (jr *JsonSQLRepository) History(query string) ([][]byte, error) {
 
 	h := [][]byte{}
 
-	page := fmt.Sprintf(" ORDER BY \"%s\" DESC LIMIT 999", jr.columns[0].name)
+	page := fmt.Sprintf(" ORDER BY \"%s\" DESC LIMIT 999", jr.columns[0].Name)
 	for {
 		log.WithField("sql", sb.String()+page).WithField("collection", jr.collection).Info("history")
 		res, err := jr.client.SQLQuery(context.TODO(), sb.String()+page, nil, true)
@@ -231,14 +236,18 @@ func (jr *JsonSQLRepository) History(query string) ([][]byte, error) {
 			h = append(h, r.Values[1].GetBs())
 		}
 
-		if jr.columns[0].cType == "INTEGER" {
-			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetN(), jr.columns[0].name)
-		} else if strings.HasPrefix(jr.columns[0].cType, "VARCHAR") {
-			page = fmt.Sprintf(" \"%s\" < '%s' ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetS(), jr.columns[0].name)
-		} else if jr.columns[0].cType == "TIMESTAMP" {
-			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].name, res.Rows[len(res.Rows)-1].Values[0].GetTs(), jr.columns[0].name)
+		if jr.columns[0].CType == "INTEGER" {
+			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetN(), jr.columns[0].Name)
+		} else if strings.HasPrefix(jr.columns[0].CType, "VARCHAR") {
+			page = fmt.Sprintf(" \"%s\" < '%s' ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetS(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "TIMESTAMP" {
+			page = fmt.Sprintf(" \"%s\" < %d ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetTs(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "BOOLEAN" {
+			page = fmt.Sprintf(" \"%s\" < %t ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetB(), jr.columns[0].Name)
+		} else if jr.columns[0].CType == "FLOAT" {
+			page = fmt.Sprintf(" \"%s\" < %f ORDER BY \"%s\" DESC LIMIT 999;", jr.columns[0].Name, res.Rows[len(res.Rows)-1].Values[0].GetF(), jr.columns[0].Name)
 		} else {
-			return nil, fmt.Errorf("unsupported field type %s", jr.columns[0].cType)
+			return nil, fmt.Errorf("unsupported field type %s", jr.columns[0].CType)
 		}
 
 		if !strings.Contains(strings.ToLower(sb.String()), "where") {
@@ -249,9 +258,26 @@ func (jr *JsonSQLRepository) History(query string) ([][]byte, error) {
 	return h, nil
 }
 
-func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, parser string, primaryKey string, columns []string) error {
+func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, primaryKey string, columns []string) error {
 	if collection == "" {
 		return errors.New("collection cannot be empty")
+	}
+
+	columnsCfg := []sqlcolumn{}
+	for _, columnStr := range columns {
+		splitted := strings.Split(columnStr, "=")
+		if len(splitted) != 2 {
+			return fmt.Errorf("invalid index definition, %s", columnStr)
+		}
+		columnsCfg = append(columnsCfg, sqlcolumn{Name: splitted[0], CType: splitted[1],
+			Primary: func() bool {
+				for _, pk := range strings.Split(primaryKey, ",") {
+					if pk == splitted[0] {
+						return true
+					}
+				}
+				return false
+			}()})
 	}
 
 	// create table representing audit log
@@ -265,18 +291,14 @@ func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, parser str
 	sb.WriteString(collection)
 	sb.WriteString(" ( ")
 	indexes := []string{}
-	for _, column := range columns {
-		splitted := strings.Split(column, "=")
-		if len(splitted) != 2 {
-			return fmt.Errorf("invalid index definition, %s", column)
-		}
+	for _, columnCfg := range columnsCfg {
 		sb.WriteString("\"")
-		sb.WriteString(splitted[0])
+		sb.WriteString(columnCfg.Name)
 		sb.WriteString("\"")
 		sb.WriteString(" ")
-		sb.WriteString(splitted[1])
+		sb.WriteString(columnCfg.CType)
 		sb.WriteString(",")
-		indexes = append(indexes, splitted[0])
+		indexes = append(indexes, columnCfg.Name)
 	}
 	sb.WriteString(" __value__ BLOB, PRIMARY KEY (")
 	sb.WriteString(primaryKey)
@@ -307,8 +329,13 @@ func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, parser str
 		return err
 	}
 
+	b, err := json.Marshal(columnsCfg)
+	if err != nil {
+		return fmt.Errorf("could not store collection config: %w", err)
+	}
+
 	cfgs := NewConfigs(cli)
-	err = cfgs.Write(collection, Config{Parser: parser, Type: "sql", Indexes: columns})
+	err = cfgs.WriteConfig(collection, b)
 	if err != nil {
 		return fmt.Errorf("could not store collection config, %w", err)
 	}

@@ -29,7 +29,7 @@ func RunImmudbContainer() (immudb.ImmuClient, string) {
 	}
 
 	resp, err := cli.ContainerCreate(ctx, &container.Config{
-		Image: "codenotary/immudb:dev",
+		Image: "codenotary/immudb-dev1",
 		Tty:   false,
 		ExposedPorts: nat.PortSet{
 			nat.Port("3322/tcp"): {},

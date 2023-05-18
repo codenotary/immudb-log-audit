@@ -64,7 +64,12 @@ func createKV(cmd *cobra.Command, args []string) error {
 		return errors.New("at least primary key needs to be specified")
 	}
 
-	err = immudb.SetupJsonKVRepository(immuCli, args[0], flagParser, flagIndexes)
+	err = immudb.NewConfigs(immuCli).WriteTypeParser("kv", args[0], flagParser)
+	if err != nil {
+		return fmt.Errorf("could not create json repository parser config, %w", err)
+	}
+
+	err = immudb.SetupJsonKVRepository(immuCli, args[0], flagIndexes)
 	if err != nil {
 		return fmt.Errorf("could not create json repository, %w", err)
 	}
