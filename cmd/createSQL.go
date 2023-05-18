@@ -67,13 +67,7 @@ func createSQL(cmd *cobra.Command, args []string) error {
 		return errors.New("at least one column and primary key needs to be specified")
 	}
 
-	cfgs := immudb.NewConfigs(immuCli)
-	err = cfgs.Write(args[0], immudb.Config{Parser: flagParser, Type: "sql", Indexes: flagColumns})
-	if err != nil {
-		return fmt.Errorf("collection does not exist, please create one first")
-	}
-
-	immudb.SetupJsonSQLRepository(immuCli, args[0], strings.Join(primaryKey, ","), flagColumns)
+	immudb.SetupJsonSQLRepository(immuCli, args[0], flagParser, strings.Join(primaryKey, ","), flagColumns)
 
 	return nil
 }

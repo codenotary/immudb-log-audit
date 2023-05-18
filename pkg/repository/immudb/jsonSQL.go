@@ -249,7 +249,7 @@ func (jr *JsonSQLRepository) History(query string) ([][]byte, error) {
 	return h, nil
 }
 
-func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, primaryKey string, columns []string) error {
+func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, parser string, primaryKey string, columns []string) error {
 	if collection == "" {
 		return errors.New("collection cannot be empty")
 	}
@@ -305,6 +305,12 @@ func SetupJsonSQLRepository(cli immudb.ImmuClient, collection string, primaryKey
 	_, err = tx.Commit(context.TODO())
 	if err != nil {
 		return err
+	}
+
+	cfgs := NewConfigs(cli)
+	err = cfgs.Write(collection, Config{Parser: parser, Type: "sql", Indexes: columns})
+	if err != nil {
+		return fmt.Errorf("could not store collection config, %w", err)
 	}
 
 	return nil

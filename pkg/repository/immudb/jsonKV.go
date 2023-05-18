@@ -56,7 +56,7 @@ func NewJsonKVRepository(cli immudb.ImmuClient, collection string) (*JsonKVRepos
 	}, nil
 }
 
-func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, indexedKeys []string) error {
+func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, parser string, indexedKeys []string) error {
 	b, err := json.Marshal(indexedKeys)
 	if err != nil {
 		return fmt.Errorf("could not marshal indexes definition, %w", err)
@@ -65,6 +65,12 @@ func SetupJsonKVRepository(cli immudb.ImmuClient, collection string, indexedKeys
 	_, err = cli.Set(context.TODO(), []byte(fmt.Sprintf("%s.collection", collection)), b)
 	if err != nil {
 		return fmt.Errorf("could not store indexes definition, %w", err)
+	}
+
+	cfgs := NewConfigs(cli)
+	err = cfgs.Write(collection, Config{Parser: parser, Type: "kv", Indexes: indexedKeys})
+	if err != nil {
+		return fmt.Errorf("could not store collection config, %w", err)
 	}
 
 	log.WithField("collection", collection).WithField("indexes", indexedKeys).Info("Created")
@@ -128,7 +134,8 @@ func (jr *JsonKVRepository) WriteBytes(jBytes []byte) (uint64, error) {
 	for i := 1; i < len(jr.indexedKeys); i++ {
 		gjSK := gjsonObject.Get(jr.indexedKeys[i])
 		if !gjSK.Exists() {
-			return 0, errors.New("missing secondary key in json")
+			//	return 0, errors.New("missing secondary key in json")
+			continue
 		}
 
 		immudbObjectRequest.KVs = append(immudbObjectRequest.KVs,
@@ -190,7 +197,10 @@ func (jr *JsonKVRepository) Read(key string, prefix string) ([][]byte, error) {
 			}
 
 			seekKey = e.Key
-			objects = append(objects, objectEntry.Value)
+			// filter out possible old entries by secondary index
+			if e.Tx == objectEntry.Tx {
+				objects = append(objects, objectEntry.Value)
+			}
 		}
 	}
 
