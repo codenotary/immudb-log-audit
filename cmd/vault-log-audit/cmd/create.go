@@ -59,6 +59,58 @@ func create(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return fmt.Errorf("invalid indexes configuration, %w", err)
 		}
+	} else if flagParser == "pgaudit" {
+		statementIDType := vaultclient.INTEGER
+		subStatementIDType := vaultclient.INTEGER
+		timestampType := vaultclient.STRING
+		auditTypeType := vaultclient.STRING
+		classType := vaultclient.STRING
+		commandType := vaultclient.STRING
+		createRequest = &vaultclient.CollectionCreateRequest{
+			Fields: &[]vaultclient.Field{
+				{
+					Name: "statement_id",
+					Type: &statementIDType,
+				},
+				{
+					Name: "substatement_id",
+					Type: &subStatementIDType,
+				},
+				{
+					Name: "timestamp",
+					Type: &timestampType,
+				},
+				{
+					Name: "audit_type",
+					Type: &auditTypeType,
+				},
+				{
+					Name: "class",
+					Type: &classType,
+				},
+				{
+					Name: "command",
+					Type: &commandType,
+				},
+			},
+			Indexes: &[]vaultclient.Index{
+				{
+					Fields: []string{"statement_id"},
+				},
+				{
+					Fields: []string{"substatement_id"},
+				},
+				{
+					Fields: []string{"audit_type"},
+				},
+				{
+					Fields: []string{"class"},
+				},
+				{
+					Fields: []string{"command"},
+				},
+			},
+		}
 	}
 
 	err = vault.SetupJsonObjectRepository(vaultClient, ledger, collection, createRequest)
