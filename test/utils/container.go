@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	immuHttp "github.com/codenotary/immudb-log-audit/pkg/client/immudb"
+	immuCliHttp "github.com/codenotary/immudb/pkg/api/httpclient"
 	immudb "github.com/codenotary/immudb/pkg/client"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -15,7 +17,7 @@ import (
 	"github.com/phayes/freeport"
 )
 
-func RunImmudbContainer() (immudb.ImmuClient, string) {
+func RunImmudbContainer() (immudb.ImmuClient, *immuHttp.HTTPClient, string) {
 	ctx := context.Background()
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
@@ -23,20 +25,22 @@ func RunImmudbContainer() (immudb.ImmuClient, string) {
 	}
 	defer cli.Close()
 
-	port, err := freeport.GetFreePort()
+	ports, err := freeport.GetFreePorts(2)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	resp, err := cli.ContainerCreate(ctx, &container.Config{
-		Image: "codenotary/immudb-dev1",
+		Image: "codenotary/immudb:dev",
 		Tty:   false,
 		ExposedPorts: nat.PortSet{
 			nat.Port("3322/tcp"): {},
+			nat.Port("8080/tcp"): {},
 		},
 	}, &container.HostConfig{
 		PortBindings: nat.PortMap{
-			nat.Port("3322/tcp"): []nat.PortBinding{{HostIP: "0.0.0.0", HostPort: fmt.Sprint(port)}},
+			nat.Port("3322/tcp"): []nat.PortBinding{{HostIP: "0.0.0.0", HostPort: fmt.Sprint(ports[0])}},
+			nat.Port("8080/tcp"): []nat.PortBinding{{HostIP: "0.0.0.0", HostPort: fmt.Sprint(ports[1])}},
 		},
 	}, nil, nil, "")
 	if err != nil {
@@ -47,7 +51,7 @@ func RunImmudbContainer() (immudb.ImmuClient, string) {
 		log.Fatal(err)
 	}
 
-	opts := immudb.DefaultOptions().WithPort(port)
+	opts := immudb.DefaultOptions().WithPort(ports[0])
 	ic := immudb.NewClient().WithOptions(opts)
 	i := 0
 	for {
@@ -69,7 +73,17 @@ func RunImmudbContainer() (immudb.ImmuClient, string) {
 		i++
 	}
 
-	return ic, resp.ID
+	ihc, err := immuCliHttp.NewClientWithResponses(fmt.Sprintf("http://%s:%d/api/v2", ic.GetOptions().Address, ports[1]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ih, err := immuHttp.NewHTTPClient(ctx, ihc, "defaultdb", "immudb", "immudb")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return ic, ih, resp.ID
 }
 
 func StopImmudbContainer(containerID string) {

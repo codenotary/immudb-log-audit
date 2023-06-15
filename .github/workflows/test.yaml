@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Pull immudb
-        run: docker pull codenotary/immudb-dev1
+        run: docker pull codenotary/immudb:dev
 
       - name: Build
         run: make

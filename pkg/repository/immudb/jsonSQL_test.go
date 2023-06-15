@@ -13,7 +13,7 @@ import (
 
 func TestSQL(t *testing.T) {
 
-	immuCli, containerID := utils.RunImmudbContainer()
+	immuCli, _, containerID := utils.RunImmudbContainer()
 	defer utils.StopImmudbContainer(containerID)
 
 	//"id=INTEGER AUTO_INCREMENT", "user=VARCHAR[256]", "dbname=VARCHAR[256]", "session_id=VARCHAR[256]", "statement_id=INTEGER", "substatement_id=INTEGER", "server_timestamp=TIMESTAMP", "timestamp=TIMESTAMP", "audit_type=VARCHAR[256]", "class=VARCHAR[256]", "command=VARCHAR[256]"}

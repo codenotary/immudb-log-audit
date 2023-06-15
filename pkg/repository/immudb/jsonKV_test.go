@@ -11,7 +11,7 @@ import (
 )
 
 func TestKV(t *testing.T) {
-	immuCli, containerID := utils.RunImmudbContainer()
+	immuCli, _, containerID := utils.RunImmudbContainer()
 	defer utils.StopImmudbContainer(containerID)
 
 	err := SetupJsonKVRepository(immuCli, "testkv", []string{"index1", "index2", "index3", "index4"})

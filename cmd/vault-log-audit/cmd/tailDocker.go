@@ -23,7 +23,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
+	cmdutils "github.com/codenotary/immudb-log-audit/pkg/cmd"
+	"github.com/codenotary/immudb-log-audit/pkg/repository/vault"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
 	"github.com/codenotary/immudb-log-audit/pkg/source"
 	log "github.com/sirupsen/logrus"
@@ -32,8 +33,8 @@ import (
 
 var tailDockerCmd = &cobra.Command{
 	Use:   "docker <collection> <container>",
-	Short: "Tail from docker logs and store audit data in immudb collection. Collection needs to be created first.",
-	Example: `immudb-log-audit tail docker pgaudit psql-postgresql-1 --follow --stdout --stderr
+	Short: "Tail from docker logs and store audit data in immudb vault collection. Collection needs to be created first.",
+	Example: `immudb-log-audit tail docker default psql-postgresql-1 --follow --stdout --stderr
 immudb-log-audit tail docker somecollection 3855fafd83b6 --stdout --stderr`,
 	RunE: tailDocker,
 	Args: cobra.ExactArgs(2),
@@ -47,19 +48,21 @@ func tailDocker(cmd *cobra.Command, args []string) error {
 
 	log.WithField("args", args).Info("Docker tail")
 
-	typ, parser, err := immudb.NewConfigs(immuCli).ReadTypeParser(args[0])
+	lp, err := cmdutils.NewLineParser(flagParser)
 	if err != nil {
-		return fmt.Errorf("collection does not exist, please create one first, %w", err)
+		return fmt.Errorf("invalid line parser, %w", err)
 	}
 
-	lp, err := newLineParser(parser)
-	if err != nil {
-		return fmt.Errorf("collection configuration is corrupted, %w", err)
+	collection := "default"
+	if len(args) == 1 {
+		collection = args[0]
+	} else {
+		log.Info("Using default collection")
 	}
 
-	jsonRepository, err := newJsonRepository(typ, args[0])
+	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBulkMode)
 	if err != nil {
-		return fmt.Errorf("collection configuration is corrupted, %w", err)
+		return fmt.Errorf("could not initialize vault, %w", err)
 	}
 
 	flagSince, _ := cmd.Flags().GetString("since")
