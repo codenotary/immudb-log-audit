@@ -111,6 +111,94 @@ func create(cmd *cobra.Command, args []string) error {
 				},
 			},
 		}
+	} else if flagParser == "pgauditjsonlog" {
+		dbNameType := vaultclient.STRING
+		userType := vaultclient.STRING
+		statementIDType := vaultclient.INTEGER
+		subStatementIDType := vaultclient.INTEGER
+		timestampType := vaultclient.STRING
+		auditTypeType := vaultclient.STRING
+		classType := vaultclient.STRING
+		commandType := vaultclient.STRING
+		createRequest = &vaultclient.CollectionCreateRequest{
+			Fields: &[]vaultclient.Field{
+				{
+					Name: "user",
+					Type: &userType,
+				},
+				{
+					Name: "dbname",
+					Type: &dbNameType,
+				},
+				{
+					Name: "statement_id",
+					Type: &statementIDType,
+				},
+				{
+					Name: "substatement_id",
+					Type: &subStatementIDType,
+				},
+				{
+					Name: "timestamp",
+					Type: &timestampType,
+				},
+				{
+					Name: "audit_type",
+					Type: &auditTypeType,
+				},
+				{
+					Name: "class",
+					Type: &classType,
+				},
+				{
+					Name: "command",
+					Type: &commandType,
+				},
+			},
+			Indexes: &[]vaultclient.Index{
+				{
+					Fields: []string{"dbname"},
+				},
+				{
+					Fields: []string{"statement_id"},
+				},
+				{
+					Fields: []string{"substatement_id"},
+				},
+				{
+					Fields: []string{"audit_type"},
+				},
+				{
+					Fields: []string{"class"},
+				},
+				{
+					Fields: []string{"command"},
+				},
+			},
+		}
+	} else if flagParser == "wrap" {
+		uidType := vaultclient.STRING
+		timestampType := vaultclient.STRING
+		createRequest = &vaultclient.CollectionCreateRequest{
+			Fields: &[]vaultclient.Field{
+				{
+					Name: "uid",
+					Type: &uidType,
+				},
+				{
+					Name: "log_timestamp",
+					Type: &timestampType,
+				},
+			},
+			Indexes: &[]vaultclient.Index{
+				{
+					Fields: []string{"uid"},
+				},
+				{
+					Fields: []string{"log_timestamp"},
+				},
+			},
+		}
 	}
 
 	err = vault.SetupJsonObjectRepository(vaultClient, ledger, collection, createRequest)

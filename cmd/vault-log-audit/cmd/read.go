@@ -31,7 +31,6 @@ var readCmd = &cobra.Command{
 immudb-log-audit read kv samplecollection indexed_field1=prefix1
 immudb-log-audit read kv samplecollection indexed_field2=prefix2`,
 	RunE: readKV,
-	Args: cobra.MinimumNArgs(1),
 }
 
 func init() {
@@ -45,18 +44,23 @@ func readKV(cmd *cobra.Command, args []string) error {
 	}
 
 	collection := "default"
-	if len(args) == 1 {
+	var query string
+	if len(args) == 2 {
 		collection = args[0]
-	} else {
+		query = args[1]
+	} else if len(args) == 1 {
 		log.Info("Using default collection")
+		query = args[0]
 	}
 
-	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBulkMode)
+	log.WithField("query", query).Debug("query")
+
+	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBatchMode)
 	if err != nil {
 		return fmt.Errorf("could not initialize vault, %w", err)
 	}
 
-	jsons, err := jsonRepository.Read("")
+	jsons, err := jsonRepository.Read(query)
 	if err != nil {
 		return fmt.Errorf("could not read vault, %w", err)
 	}

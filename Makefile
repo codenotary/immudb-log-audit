@@ -29,6 +29,24 @@ PUSH_TAG ?= $(REPO)/immudb-log-audit
 VAULT_IMAGE_TAG ?= $(REPO)/vault-log-audit
 VAULT_PUSH_TAG ?= $(REPO)/vault-log-audit
 
+.PHONY: vault-log-audit
+vault-log-audit:
+	$(GO) build -v -ldflags '$(V_LDFLAGS)' -o vault-log-audit ./cmd/vault-log-audit/main.go
+
+.PHONY: docker push
+docker:
+	docker build . -f Dockerfile.vault -t $(VAULT_IMAGE_TAG) \
+	--label "com.codenotary.commit=$(BUILD_TAG)" \
+	--build-arg V_VERSION=$(V_VERSION) \
+	--build-arg V_COMMIT=$(V_COMMIT) \
+	--build-arg V_BUILT_AT=$(V_BUILT_AT) 
+
+push: docker
+	docker image tag $(VAULT_IMAGE_TAG):latest $(VAULT_PUSH_TAG):$(BUILD_TAG)
+	docker image tag $(VAULT_IMAGE_TAG):latest $(VAULT_PUSH_TAG):latest
+	docker image push $(VAULT_PUSH_TAG):$(BUILD_TAG)
+	docker image push $(VAULT_PUSH_TAG):latest
+
 .PHONY: immudb-log-audit
 immudb-log-audit:
 	$(GO) build -v -ldflags '$(V_LDFLAGS)' -o immudb-log-audit ./cmd/immudb-log-audit/main.go
@@ -37,34 +55,16 @@ immudb-log-audit:
 test:
 	$(GO) test -coverprofile cover.txt -v ./...
 
-.PHONY: docker push
-docker:
+.PHONY: immudb-docker immudb-push
+immudb-docker:
 	docker build . -f Dockerfile.immudb -t $(IMAGE_TAG) \
 	--label "com.codenotary.commit=$(BUILD_TAG)" \
 	--build-arg V_VERSION=$(V_VERSION) \
 	--build-arg V_COMMIT=$(V_COMMIT) \
 	--build-arg V_BUILT_AT=$(V_BUILT_AT) 
 
-push: docker
+immudb-push: immudb-docker
 	docker image tag $(IMAGE_TAG):latest $(PUSH_TAG):$(BUILD_TAG)
 	docker image tag $(IMAGE_TAG):latest $(PUSH_TAG):latest
 	docker image push $(PUSH_TAG):$(BUILD_TAG)
 	docker image push $(PUSH_TAG):latest
-
-.PHONY: vault-log-audit
-vault-log-audit:
-	$(GO) build -v -ldflags '$(V_LDFLAGS)' -o vault-log-audit ./cmd/vault-log-audit/main.go
-
-.PHONY: vault-docker vault-push
-vault-docker:
-	docker build . -f Dockerfile.vault -t $(VAULT_IMAGE_TAG) \
-	--label "com.codenotary.commit=$(BUILD_TAG)" \
-	--build-arg V_VERSION=$(V_VERSION) \
-	--build-arg V_COMMIT=$(V_COMMIT) \
-	--build-arg V_BUILT_AT=$(V_BUILT_AT) 
-
-vault-push: docker
-	docker image tag $(VAULT_IMAGE_TAG):latest $(VAULT_PUSH_TAG):$(BUILD_TAG)
-	docker image tag $(VAULT_IMAGE_TAG):latest $(VAULT_PUSH_TAG):latest
-	docker image push $(VAULT_PUSH_TAG):$(BUILD_TAG)
-	docker image push $(VAULT_PUSH_TAG):latest

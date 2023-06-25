@@ -17,9 +17,12 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	vaultclient "github.com/codenotary/immudb-log-audit/pkg/client/vault"
@@ -27,6 +30,7 @@ import (
 	"github.com/deepmap/oapi-codegen/pkg/securityprovider"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -38,7 +42,7 @@ var (
 var vaultClient vaultclient.ClientWithResponsesInterface
 var ledger string
 var flagParser string
-var flagBulkMode bool
+var flagBatchMode bool
 
 func version() string {
 	return fmt.Sprintf("%s, commit: %s, build time: %s",
@@ -57,12 +61,18 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	cobra.OnInitialize(func() {
+		replacer := strings.NewReplacer("-", "_")
+		viper.SetEnvKeyReplacer(replacer)
+		viper.AutomaticEnv()
+	})
+
 	rootCmd.SetUsageTemplate(cmd.UsageTemplate)
-	rootCmd.PersistentFlags().String("vault-address", "http://localhost:9000/ics/api/v1", "vault address")
-	rootCmd.PersistentFlags().String("vault-api-key", "", "vault api key")
+	rootCmd.PersistentFlags().String("vault-address", "https://vault.immudb.io", "vault address, can be set with VAULT_ADDRESS env var")
+	rootCmd.PersistentFlags().String("vault-api-key", "", "Vault api key, can be set with VAULT_API_KEY env var")
 	rootCmd.PersistentFlags().StringVar(&ledger, "ledger", "default", "Ledger to be used")
-	rootCmd.PersistentFlags().StringVar(&flagParser, "parser", "", "Line parser to be used. When not specified, lines will be considered as jsons. Also available 'pgaudit', 'wrap'. For those, indexes are predefined.")
-	rootCmd.PersistentFlags().BoolVar(&flagBulkMode, "bulk-mode", false, "")
+	rootCmd.PersistentFlags().StringVar(&flagParser, "parser", "", "Line parser to be used. When not specified, lines will be considered as jsons. Also available 'pgaudit', 'pgauditjsonlog', 'wrap'. For those, indexes are predefined.")
+	rootCmd.PersistentFlags().BoolVar(&flagBatchMode, "batch-mode", true, "")
 	rootCmd.PersistentFlags().String("log-level", "info", "Log level (trace, debug, info, warn, error)")
 }
 
@@ -79,13 +89,19 @@ func root(cmd *cobra.Command, args []string) error {
 
 	log.SetLevel(logLevel)
 
-	vaultAddress, _ := cmd.Flags().GetString("vault-address")
-	vaultAPIKey, _ := cmd.Flags().GetString("vault-api-key")
+	vaultAddress := viper.GetString("vault-address")
+	vaultAPIKey := viper.GetString("vault-api-key")
+
+	if vaultAPIKey == "" {
+		return errors.New("vault-api-key cannot be empty")
+	}
 
 	apikeyProvider, err := securityprovider.NewSecurityProviderApiKey("header", "X-API-Key", vaultAPIKey)
 	if err != nil {
 		return fmt.Errorf("could not configure API Key provider, %w", err)
 	}
+
+	vaultAddress, _ = url.JoinPath(vaultAddress, "ics/api/v1")
 
 	vaultClient, err = vaultclient.NewClientWithResponses(vaultAddress, vaultclient.WithRequestEditorFn(apikeyProvider.Intercept))
 	if err != nil {

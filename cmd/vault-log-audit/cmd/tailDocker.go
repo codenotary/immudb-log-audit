@@ -37,7 +37,7 @@ var tailDockerCmd = &cobra.Command{
 	Example: `immudb-log-audit tail docker default psql-postgresql-1 --follow --stdout --stderr
 immudb-log-audit tail docker somecollection 3855fafd83b6 --stdout --stderr`,
 	RunE: tailDocker,
-	Args: cobra.ExactArgs(2),
+	Args: cobra.MinimumNArgs(1),
 }
 
 func tailDocker(cmd *cobra.Command, args []string) error {
@@ -54,13 +54,16 @@ func tailDocker(cmd *cobra.Command, args []string) error {
 	}
 
 	collection := "default"
-	if len(args) == 1 {
+	var container string
+	if len(args) == 2 {
 		collection = args[0]
+		container = args[1]
 	} else {
 		log.Info("Using default collection")
+		container = args[0]
 	}
 
-	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBulkMode)
+	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBatchMode)
 	if err != nil {
 		return fmt.Errorf("could not initialize vault, %w", err)
 	}
@@ -77,7 +80,7 @@ func tailDocker(cmd *cobra.Command, args []string) error {
 		cancel()
 	}()
 
-	dockerTail, err := source.NewDockerTail(ctx, args[1], flagFollow, flagSince, flagStdout, flagStderr)
+	dockerTail, err := source.NewDockerTail(ctx, container, flagFollow, flagSince, flagStdout, flagStderr)
 	if err != nil {
 		return fmt.Errorf("invalide source: %w", err)
 	}

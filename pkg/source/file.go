@@ -49,6 +49,7 @@ type fileTail struct {
 	follow         bool
 	registryDB     bool
 	registryDBFile string
+	registryMutex  sync.RWMutex
 	registry       map[string]fileWatch
 	lC             chan string
 	wg             sync.WaitGroup
@@ -93,6 +94,7 @@ func NewFileTail(ctx context.Context, pattern string, follow bool, registryDB bo
 		follow:         follow,
 		registryDB:     registryDB,
 		registryDBFile: registryDBFile,
+		registryMutex:  sync.RWMutex{},
 		registry:       registry,
 		lC:             make(chan string),
 		ctx:            ctx,
@@ -102,17 +104,15 @@ func NewFileTail(ctx context.Context, pattern string, follow bool, registryDB bo
 	return &ft, nil
 }
 
-func (ft *fileTail) ReadLine() (string, error) {
-	l, ok := <-ft.lC
-	if !ok {
-		return l, io.EOF
-	}
-
-	return l, nil
+func (ft *fileTail) ReadLine() chan string {
+	return ft.lC
 }
 
-func (ft *fileTail) saveRegistry() {
+func (ft *fileTail) SaveState() {
 	if ft.registryDB {
+		ft.registryMutex.Lock()
+		defer ft.registryMutex.Unlock()
+
 		frBytes, err := json.Marshal(ft.registry)
 		if err != nil {
 			log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
@@ -121,6 +121,8 @@ func (ft *fileTail) saveRegistry() {
 			if err != nil {
 				log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
 			}
+
+			log.WithField("path", ft.registryDBFile).Info("Saved file tail state")
 		}
 	}
 }
@@ -156,6 +158,7 @@ func (ft *fileTail) watchFiles() {
 								}
 
 								ft.lC <- l.Text
+								ft.registryMutex.RLock()
 								if fw.Fm.Offset > l.SeekInfo.Offset {
 									log.WithField("file", fw.t.Filename).WithField("fm_offset", fw.Fm.Offset).WithField("offset", l.SeekInfo.Offset).Debug("Detected truncation")
 									fw.Fm.Prefix = []byte{}
@@ -169,13 +172,12 @@ func (ft *fileTail) watchFiles() {
 									fw.Fm.Prefix = append(fw.Fm.Prefix, []byte("\n")...)
 									fw.Fm.PrefixLength += len(l.Text) + 1
 								}
+								ft.registryMutex.RUnlock()
 							}
 						}
 					}()
 				}
 			}
-
-			ft.saveRegistry()
 
 			if !ft.follow {
 				break
@@ -190,7 +192,6 @@ func (ft *fileTail) watchFiles() {
 
 		ft.wg.Wait()
 		close(ft.lC)
-		ft.saveRegistry()
 	}()
 }
 
@@ -204,6 +205,10 @@ func (ft *fileTail) listFiles() ([]fileWatch, error) {
 	newFiles := []fileWatch{}
 
 	log.WithField("files", matches).Debug("Matching files")
+
+	ft.registryMutex.Lock()
+	defer ft.registryMutex.Unlock()
+
 nextFile:
 	for _, m := range matches {
 		fi, err := os.Stat(m)

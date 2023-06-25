@@ -21,6 +21,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
 
 	vaultclient "github.com/codenotary/immudb-log-audit/pkg/client/vault"
@@ -28,85 +29,89 @@ import (
 )
 
 type JsonVaultRepository struct {
-	client        vaultclient.ClientWithResponsesInterface
-	ledger        string
-	collection    string
-	bulkMode      bool
-	docBuf        []byte
-	docBufCounter int
+	client     vaultclient.ClientWithResponsesInterface
+	ledger     string
+	collection string
+	batchMode  bool
 }
 
-func NewJsonVaultRepository(client vaultclient.ClientWithResponsesInterface, ledger string, collection string, bulkMode bool) (*JsonVaultRepository, error) {
+func NewJsonVaultRepository(client vaultclient.ClientWithResponsesInterface, ledger string, collection string, batchMode bool) (*JsonVaultRepository, error) {
 	return &JsonVaultRepository{
 		client:     client,
 		ledger:     ledger,
 		collection: collection,
-		bulkMode:   bulkMode,
-		docBuf:     []byte(`{"documents": [`),
+		batchMode:  batchMode,
 	}, nil
 }
 
-func (jv *JsonVaultRepository) WriteBytes(jBytes []byte) (uint64, error) {
+func (jv *JsonVaultRepository) WriteBytes(jBytes [][]byte) (uint64, error) {
 	ctx := context.Background()
 	var txID uint64
-	if jv.bulkMode {
+	if jv.batchMode {
 		//TODO: add ticker
-		if jv.docBufCounter > 0 {
-			jv.docBuf = append(jv.docBuf, ',')
-		}
-
-		jv.docBuf = append(jv.docBuf, jBytes...)
-		jv.docBufCounter++
-		if jv.docBufCounter < 100 {
-			return 0, nil
-		}
-
-		jv.docBuf = append(jv.docBuf, []byte("]}")...)
-		res, err := jv.client.DocumentCreateManyWithBodyWithResponse(ctx, jv.ledger, jv.collection, "application/json", bytes.NewBuffer(jv.docBuf))
-		jv.docBuf = []byte(`{"documents": [`)
-		jv.docBufCounter = 0
-		if err != nil {
-			return 0, fmt.Errorf("error writing document to vault, %w", err)
-		}
-
-		if res.JSON200 == nil {
-			return 0, fmt.Errorf("error writing document to vault, %d, %s", res.StatusCode(), string(res.Body))
-		}
-
-		log.WithField("documentID", res.JSON200.DocumentIds[0]).WithField("txID", func() string {
-			if res.JSON200.TransactionId != nil {
-				return *res.JSON200.TransactionId
+		docBuf := []byte(`{"documents": [`)
+		docBufCounter := 0
+		for i := 0; i < len(jBytes); i++ {
+			if docBufCounter > 0 {
+				docBuf = append(docBuf, ',')
 			}
-			return ""
-		}()).Debug("Created document")
 
-		if res.JSON200.TransactionId != nil {
-			txID, err = strconv.ParseUint(*res.JSON200.TransactionId, 10, 64)
+			docBuf = append(docBuf, jBytes[i]...)
+			docBufCounter++
+			if docBufCounter < 100 && i != len(jBytes)-1 {
+				continue
+			}
+
+			docBuf = append(docBuf, []byte("]}")...)
+			res, err := jv.client.DocumentCreateManyWithBodyWithResponse(ctx, jv.ledger, jv.collection, "application/json", bytes.NewBuffer(docBuf))
+			docBuf = []byte(`{"documents": [`)
+			docBufCounter = 0
 			if err != nil {
-				log.WithField("txID", *res.JSON200.TransactionId).WithError(err).Error("could not convert transactionID")
+				return 0, fmt.Errorf("error writing document to vault, %w", err)
+			}
+
+			if res.JSON200 == nil {
+				return 0, fmt.Errorf("error writing document to vault, %d, %s", res.StatusCode(), string(res.Body))
+			}
+
+			log.WithField("documentID", res.JSON200.DocumentIds[0]).WithField("txID", func() string {
+				if res.JSON200.TransactionId != nil {
+					return *res.JSON200.TransactionId
+				}
+				return ""
+			}()).Debug("Created document")
+
+			if res.JSON200.TransactionId != nil {
+				txID, err = strconv.ParseUint(*res.JSON200.TransactionId, 10, 64)
+				if err != nil {
+					log.WithField("txID", *res.JSON200.TransactionId).WithError(err).Error("could not convert transactionID")
+				}
 			}
 		}
 	} else {
-		res, err := jv.client.DocumentCreateWithBodyWithResponse(ctx, jv.ledger, jv.collection, "application/json", bytes.NewReader(jBytes))
-		if err != nil {
-			return 0, fmt.Errorf("error writing document to vault, %w", err)
-		}
-
-		if res.JSON200 == nil {
-			return 0, fmt.Errorf("error writing document to vault, %d, %s", res.StatusCode(), string(res.Body))
-		}
-
-		log.WithField("documentID", res.JSON200.DocumentId).WithField("txID", func() string {
-			if res.JSON200.TransactionId != nil {
-				return *res.JSON200.TransactionId
-			}
-			return ""
-		}()).Debug("Created document")
-
-		if res.JSON200.TransactionId != nil {
-			txID, err = strconv.ParseUint(*res.JSON200.TransactionId, 10, 64)
+		for i := 0; i < len(jBytes); i++ {
+			log.WithField("line", string(jBytes[i])).Debug("Writing line")
+			res, err := jv.client.DocumentCreateWithBodyWithResponse(ctx, jv.ledger, jv.collection, "application/json", bytes.NewReader(jBytes[i]))
 			if err != nil {
-				log.WithField("txID", *res.JSON200.TransactionId).WithError(err).Error("could not convert transactionID")
+				return 0, fmt.Errorf("error writing document to vault, %w", err)
+			}
+
+			if res.JSON200 == nil {
+				return 0, fmt.Errorf("error writing document to vault, %d, %s", res.StatusCode(), string(res.Body))
+			}
+
+			log.WithField("documentID", res.JSON200.DocumentId).WithField("txID", func() string {
+				if res.JSON200.TransactionId != nil {
+					return *res.JSON200.TransactionId
+				}
+				return ""
+			}()).Debug("Created document")
+
+			if res.JSON200.TransactionId != nil {
+				txID, err = strconv.ParseUint(*res.JSON200.TransactionId, 10, 64)
+				if err != nil {
+					log.WithField("txID", *res.JSON200.TransactionId).WithError(err).Error("could not convert transactionID")
+				}
 			}
 		}
 	}
@@ -155,7 +160,7 @@ func (jv *JsonVaultRepository) Read(queryString string) ([][]byte, error) {
 	}
 
 	if queryString != "" {
-		var query vaultclient.Query
+		query := vaultclient.Query{}
 		err := json.Unmarshal([]byte(queryString), &query)
 		if err != nil {
 			return nil, fmt.Errorf("invalid query, %w", err)
@@ -242,17 +247,13 @@ func SetupJsonObjectRepository(client vaultclient.ClientWithResponsesInterface, 
 	resGet, err := client.CollectionGetWithResponse(ctx, ledger, collection)
 	if err != nil {
 		return fmt.Errorf("could not get collection,error %w", err)
-	} else if resGet.JSON400 != nil {
-		return fmt.Errorf("could not get collection, 400 %s, error %s", resGet.JSON400.Status, resGet.JSON400.Error)
-	} else if resGet.JSON403 != nil {
-		return fmt.Errorf("could not get collection, forbidden, error %s", resGet.JSON403.Error)
-	} else if resGet.JSON500 != nil {
-		return fmt.Errorf("could not read collection, 500 %s, error %s", resGet.JSON500.Status, resGet.JSON500.Error)
-	} else if resGet.JSON404 != nil {
-		log.Info("Collection does not exist, creating ...")
-	} else if resGet.JSON200 != nil {
+	}
+
+	if resGet.JSON200 != nil {
 		log.WithField("collection", *resGet.JSON200).Info("Using existing collection")
 		return nil
+	} else if resGet.JSON404 != nil {
+		log.WithField("collection", collection).Info("Collection does not exist, creating ...")
 	} else {
 		return fmt.Errorf("could not read default collection, %s, error %s", resGet.Status(), string(resGet.Body))
 	}
@@ -265,19 +266,13 @@ func SetupJsonObjectRepository(client vaultclient.ClientWithResponsesInterface, 
 	resCreate, err := client.CollectionCreateWithResponse(ctx, ledger, collection, *createRequest)
 	if err != nil {
 		return fmt.Errorf("could not create collection, %w", err)
-	} else if resCreate.JSON400 != nil {
-		return fmt.Errorf("could not create collection, %s, error %s", resCreate.JSON400.Status, resCreate.JSON400.Error)
-	} else if resCreate.JSON402 != nil {
-		return fmt.Errorf("could not create collection, %s, error %s", resCreate.JSON402.Status, resCreate.JSON402.Error)
-	} else if resCreate.JSON403 != nil {
-		return fmt.Errorf("could not create collection, %s, error %s", resCreate.JSON403.Status, resCreate.JSON403.Error)
-	} else if resCreate.JSON409 != nil {
-		return fmt.Errorf("could not create collection, %s, error %s", resCreate.JSON409.Status, resCreate.JSON409.Error)
-	} else if resCreate.JSON500 != nil {
-		return fmt.Errorf("could not create collection, %s, error %s", resCreate.JSON500.Status, resCreate.JSON500.Error)
 	}
 
-	log.Info("Collection created")
+	if resCreate.StatusCode() != http.StatusOK {
+		return fmt.Errorf("could not create collection, %s, error %s", resGet.Status(), string(resGet.Body))
+	}
+
+	log.WithField("collection", collection).Info("Collection created")
 
 	return nil
 }

@@ -90,7 +90,7 @@ func (jr *JsonKVRepository) Write(jObject interface{}) (uint64, error) {
 		return 0, fmt.Errorf("could not marshal object: %w", err)
 	}
 
-	return jr.WriteBytes(objectBytes)
+	return jr.WriteBytes([][]byte{objectBytes})
 }
 
 // Writes json bytes as key-values in immudb, with help of gjson to extract
@@ -104,62 +104,66 @@ func (jr *JsonKVRepository) Write(jObject interface{}) (uint64, error) {
 //
 // Indexes values contain the name of payload key
 
-func (jr *JsonKVRepository) WriteBytes(jBytes []byte) (uint64, error) {
+func (jr *JsonKVRepository) WriteBytes(jBytesArr [][]byte) (uint64, error) {
 	if len(jr.indexedKeys) == 0 {
 		return 0, errors.New("primary key is mandataory")
 	}
 
-	// parse with gjson
-	gjsonObject := gjson.ParseBytes(jBytes)
+	var txID uint64
+	for _, jBytes := range jBytesArr {
+		// parse with gjson
+		gjsonObject := gjson.ParseBytes(jBytes)
 
-	// resolve primary key, format "key1+key2+..."
-	var pks []string
-	for _, pkPart := range strings.Split(jr.indexedKeys[0], "+") {
-		gjPK := gjsonObject.Get(pkPart)
-		if !gjPK.Exists() {
-			return 0, fmt.Errorf("missing primary key in json, %s", pkPart)
-		}
-		pks = append(pks, gjPK.String())
-	}
-
-	pk := strings.Join(pks, "_")
-
-	immudbObjectRequest := &schema.SetRequest{
-		KVs: []*schema.KeyValue{
-			{ // crete primary key index
-				Key:   []byte(fmt.Sprintf("%s.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)),
-				Value: []byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)), //value is link to payload
-			},
-			{ // create payload entry
-				Key:   []byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)),
-				Value: jBytes,
-			},
-		},
-	}
-
-	for i := 1; i < len(jr.indexedKeys); i++ {
-		gjSK := gjsonObject.Get(jr.indexedKeys[i])
-		if !gjSK.Exists() {
-			//	return 0, errors.New("missing secondary key in json")
-			continue
+		// resolve primary key, format "key1+key2+..."
+		var pks []string
+		for _, pkPart := range strings.Split(jr.indexedKeys[0], "+") {
+			gjPK := gjsonObject.Get(pkPart)
+			if !gjPK.Exists() {
+				return 0, fmt.Errorf("missing primary key in json, %s", pkPart)
+			}
+			pks = append(pks, gjPK.String())
 		}
 
-		immudbObjectRequest.KVs = append(immudbObjectRequest.KVs,
-			&schema.KeyValue{ // crete secondary key index <collection>.<SKName>.<SKVALUE>.<PKVALUE>
-				Key:   []byte(fmt.Sprintf("%s.%s.{%s}.{%s}", jr.collection, jr.indexedKeys[i], gjSK.String(), pk)),
-				Value: []byte([]byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk))), //value is link to payload
+		pk := strings.Join(pks, "_")
+
+		immudbObjectRequest := &schema.SetRequest{
+			KVs: []*schema.KeyValue{
+				{ // crete primary key index
+					Key:   []byte(fmt.Sprintf("%s.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)),
+					Value: []byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)), //value is link to payload
+				},
+				{ // create payload entry
+					Key:   []byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk)),
+					Value: jBytes,
+				},
 			},
-		)
+		}
+
+		for i := 1; i < len(jr.indexedKeys); i++ {
+			gjSK := gjsonObject.Get(jr.indexedKeys[i])
+			if !gjSK.Exists() {
+				//	return 0, errors.New("missing secondary key in json")
+				continue
+			}
+
+			immudbObjectRequest.KVs = append(immudbObjectRequest.KVs,
+				&schema.KeyValue{ // crete secondary key index <collection>.<SKName>.<SKVALUE>.<PKVALUE>
+					Key:   []byte(fmt.Sprintf("%s.%s.{%s}.{%s}", jr.collection, jr.indexedKeys[i], gjSK.String(), pk)),
+					Value: []byte([]byte(fmt.Sprintf("%s.payload.%s.{%s}", jr.collection, jr.indexedKeys[0], pk))), //value is link to payload
+				},
+			)
+		}
+
+		txh, err := jr.client.SetAll(context.TODO(), immudbObjectRequest)
+		if err != nil {
+			return 0, fmt.Errorf("could not store object: %w", err)
+		}
+
+		log.WithField("txID", txh.Id).Trace("Wrote entry")
+		txID = txh.Id
 	}
 
-	txh, err := jr.client.SetAll(context.TODO(), immudbObjectRequest)
-	if err != nil {
-		return 0, fmt.Errorf("could not store object: %w", err)
-	}
-
-	log.WithField("txID", txh.Id).Trace("Wrote entry")
-
-	return txh.Id, nil
+	return txID, nil
 }
 
 // for now just based on SK

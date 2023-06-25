@@ -28,7 +28,7 @@ var auditCmd = &cobra.Command{
 	Use:     "audit <collection> <documentID>",
 	Short:   "Audit your collection entry",
 	Example: "vault-log-audit audit default 648a32500000000000000bc0b922a7c9",
-	Args:    cobra.MinimumNArgs(2),
+	Args:    cobra.MinimumNArgs(1),
 	RunE:    audit,
 }
 
@@ -43,18 +43,21 @@ func audit(cmd *cobra.Command, args []string) error {
 	}
 
 	collection := "default"
-	if len(args) == 1 {
+	var documentID string
+	if len(args) == 2 {
 		collection = args[0]
+		documentID = args[1]
 	} else {
 		log.Info("Using default collection")
+		documentID = args[0]
 	}
 
-	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBulkMode)
+	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBatchMode)
 	if err != nil {
 		return fmt.Errorf("could not initialize vault, %w", err)
 	}
 
-	history, err := jsonRepository.Audit(args[1])
+	history, err := jsonRepository.Audit(documentID)
 	if err != nil {
 		return fmt.Errorf("could not audit, %w", err)
 	}

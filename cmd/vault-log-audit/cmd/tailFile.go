@@ -42,7 +42,7 @@ var tailFileCmd = &cobra.Command{
 	Example: `immudb-log-audit tail file k8scollection kubernetes.log --follow
 immudb-log-audit tail file somecollection /path/to/log/file`,
 	RunE: tailFile,
-	Args: cobra.ExactArgs(2),
+	Args: cobra.MinimumNArgs(1),
 }
 
 func tailFile(cmd *cobra.Command, args []string) error {
@@ -57,13 +57,17 @@ func tailFile(cmd *cobra.Command, args []string) error {
 	}
 
 	collection := "default"
-	if len(args) == 1 {
+	var file string
+	log.WithField("args", args).Debug("Args")
+	if len(args) == 2 {
 		collection = args[0]
+		file = args[1]
 	} else {
 		log.Info("Using default collection")
+		file = args[0]
 	}
 
-	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBulkMode)
+	jsonRepository, err := vault.NewJsonVaultRepository(vaultClient, ledger, collection, flagBatchMode)
 	if err != nil {
 		return fmt.Errorf("could not initialize vault, %w", err)
 	}
@@ -77,7 +81,7 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		cancel()
 	}()
 
-	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagRegistryEnabled, flagRegistryDBDir)
+	fileTail, err := source.NewFileTail(ctx, file, flagFollow, flagRegistryEnabled, flagRegistryDBDir)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}

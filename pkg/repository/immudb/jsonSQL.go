@@ -87,63 +87,68 @@ func (jr *JsonSQLRepository) Write(jObject interface{}) (uint64, error) {
 		return 0, fmt.Errorf("could not marshal object: %w", err)
 	}
 
-	return jr.WriteBytes(objectBytes)
+	return jr.WriteBytes([][]byte{objectBytes})
 }
 
-func (jr *JsonSQLRepository) WriteBytes(jBytes []byte) (uint64, error) {
-	// parse with gjson
-	gjsonObject := gjson.ParseBytes(jBytes)
+func (jr *JsonSQLRepository) WriteBytes(jBytesArr [][]byte) (uint64, error) {
+	var txID uint64
+	for _, jBytes := range jBytesArr {
+		// parse with gjson
+		gjsonObject := gjson.ParseBytes(jBytes)
 
-	params := map[string]interface{}{"__value__": jBytes}
-	cSlice := []string{}
-	command := "UPSERT"
-	for _, c := range jr.columns {
-		if c.Name == "__value__" {
-			continue
+		params := map[string]interface{}{"__value__": jBytes}
+		cSlice := []string{}
+		command := "UPSERT"
+		for _, c := range jr.columns {
+			if c.Name == "__value__" {
+				continue
+			}
+
+			if c.CType == "INTEGER AUTO_INCREMENT" {
+				command = "INSERT"
+				continue
+			}
+
+			cSlice = append(cSlice, c.Name)
+			gjr := gjsonObject.Get(c.Name)
+			if c.Primary && !gjr.Exists() {
+				return 0, fmt.Errorf("missing field %s in object", c.Name)
+			}
+
+			if c.CType == "INTEGER" {
+				params[c.Name] = gjr.Int()
+			} else if strings.HasPrefix(c.CType, "VARCHAR") {
+				params[c.Name] = gjr.String()
+			} else if c.CType == "TIMESTAMP" {
+				params[c.Name] = gjr.Time()
+			} else if c.CType == "BOOLEAN" {
+				params[c.Name] = gjr.Bool()
+			} else if c.CType == "FLOAT" {
+				params[c.Name] = gjr.Float()
+			} else {
+				return 0, fmt.Errorf("unsupported field type %s", c.CType)
+			}
 		}
 
-		if c.CType == "INTEGER AUTO_INCREMENT" {
-			command = "INSERT"
-			continue
+		sb := strings.Builder{}
+		sb.WriteString(command)
+		sb.WriteString(" INTO ")
+		sb.WriteString(jr.collection)
+		sb.WriteString(" (\"")
+		sb.WriteString(strings.Join(cSlice, "\",\""))
+		sb.WriteString("\", \"__value__\") VALUES (@")
+		sb.WriteString(strings.Join(cSlice, ",@"))
+		sb.WriteString(",@__value__);")
+		log.WithField("sql", sb.String()).WithField("collection", jr.collection).Trace("Inserting row")
+		res, err := jr.client.SQLExec(context.TODO(), sb.String(), params)
+		if err != nil {
+			return 0, fmt.Errorf("could not insert into collection, %w", err)
 		}
 
-		cSlice = append(cSlice, c.Name)
-		gjr := gjsonObject.Get(c.Name)
-		if c.Primary && !gjr.Exists() {
-			return 0, fmt.Errorf("missing field %s in object", c.Name)
-		}
-
-		if c.CType == "INTEGER" {
-			params[c.Name] = gjr.Int()
-		} else if strings.HasPrefix(c.CType, "VARCHAR") {
-			params[c.Name] = gjr.String()
-		} else if c.CType == "TIMESTAMP" {
-			params[c.Name] = gjr.Time()
-		} else if c.CType == "BOOLEAN" {
-			params[c.Name] = gjr.Bool()
-		} else if c.CType == "FLOAT" {
-			params[c.Name] = gjr.Float()
-		} else {
-			return 0, fmt.Errorf("unsupported field type %s", c.CType)
-		}
+		txID = res.Txs[0].Header.Id
 	}
 
-	sb := strings.Builder{}
-	sb.WriteString(command)
-	sb.WriteString(" INTO ")
-	sb.WriteString(jr.collection)
-	sb.WriteString(" (\"")
-	sb.WriteString(strings.Join(cSlice, "\",\""))
-	sb.WriteString("\", \"__value__\") VALUES (@")
-	sb.WriteString(strings.Join(cSlice, ",@"))
-	sb.WriteString(",@__value__);")
-	log.WithField("sql", sb.String()).WithField("collection", jr.collection).Trace("Inserting row")
-	res, err := jr.client.SQLExec(context.TODO(), sb.String(), params)
-	if err != nil {
-		return 0, fmt.Errorf("could not insert into collection, %w", err)
-	}
-
-	return res.Txs[0].Header.Id, nil
+	return txID, nil
 }
 
 func (jr *JsonSQLRepository) Read(query string) ([][]byte, error) {
