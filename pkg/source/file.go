@@ -47,6 +47,7 @@ type fileWatch struct {
 type fileTail struct {
 	pattern        string
 	follow         bool
+	registryDB     bool
 	registryDBFile string
 	registry       map[string]fileWatch
 	lC             chan string
@@ -54,40 +55,43 @@ type fileTail struct {
 	ctx            context.Context
 }
 
-func NewFileTail(ctx context.Context, pattern string, follow bool, registryFolder string) (*fileTail, error) {
+func NewFileTail(ctx context.Context, pattern string, follow bool, registryDB bool, registryFolder string) (*fileTail, error) {
 
 	registry := map[string]fileWatch{}
 
-	registryDBFile := "registryFile.txt"
+	registryDBFile := "registry-file.txt"
 
-	if registryFolder != "" {
-		fi, err := os.Stat(registryFolder)
-		if err != nil {
-			return nil, fmt.Errorf("could not stat registry directory: %w", err)
+	if registryDB {
+		if registryFolder != "" {
+			fi, err := os.Stat(registryFolder)
+			if err != nil {
+				return nil, fmt.Errorf("could not stat registry directory: %w", err)
+			}
+
+			if !fi.IsDir() {
+				return nil, fmt.Errorf("registry folder is not a directory")
+			}
+
+			registryDBFile = path.Join(registryFolder, registryDBFile)
 		}
 
-		if !fi.IsDir() {
-			return nil, fmt.Errorf("registry folder is not a directory")
-		}
-
-		registryDBFile = path.Join(registryFolder, registryDBFile)
-	}
-
-	frBytes, err := os.ReadFile(registryDBFile)
-	if err != nil {
-		log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be read")
-	} else {
-		err = json.Unmarshal(frBytes, &registry)
+		frBytes, err := os.ReadFile(registryDBFile)
 		if err != nil {
-			log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be unmarshaled, ignoring")
+			log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be read")
 		} else {
-			log.WithField("path", registry).Debug("Using registry file")
+			err = json.Unmarshal(frBytes, &registry)
+			if err != nil {
+				log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be unmarshaled, ignoring")
+			} else {
+				log.WithField("path", registry).Debug("Using registry file")
+			}
 		}
 	}
 
 	ft := fileTail{
 		pattern:        pattern,
 		follow:         follow,
+		registryDB:     registryDB,
 		registryDBFile: registryDBFile,
 		registry:       registry,
 		lC:             make(chan string),
@@ -108,13 +112,15 @@ func (ft *fileTail) ReadLine() (string, error) {
 }
 
 func (ft *fileTail) saveRegistry() {
-	frBytes, err := json.Marshal(ft.registry)
-	if err != nil {
-		log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
-	} else {
-		err = os.WriteFile(ft.registryDBFile, frBytes, 0666)
+	if ft.registryDB {
+		frBytes, err := json.Marshal(ft.registry)
 		if err != nil {
-			log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
+			log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
+		} else {
+			err = os.WriteFile(ft.registryDBFile, frBytes, 0666)
+			if err != nil {
+				log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
+			}
 		}
 	}
 }

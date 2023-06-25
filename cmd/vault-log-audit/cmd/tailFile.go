@@ -31,6 +31,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	flagRegistryEnabled bool
+	flagRegistryDBDir   string
+)
+
 var tailFileCmd = &cobra.Command{
 	Use:   "file <collection> <file>",
 	Short: "Tail from file and store audit data in immudb collection.",
@@ -72,9 +77,7 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		cancel()
 	}()
 
-	flagregistryDBDir, _ := cmd.Flags().GetString("file-registry-dir")
-
-	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagregistryDBDir)
+	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagRegistryEnabled, flagRegistryDBDir)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
@@ -89,5 +92,6 @@ func tailFile(cmd *cobra.Command, args []string) error {
 
 func init() {
 	tailCmd.AddCommand(tailFileCmd)
-	tailFileCmd.Flags().String("file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
+	tailFileCmd.Flags().BoolVar(&flagRegistryEnabled, "file-registry-enabled", true, "Enable monitoring of read files")
+	tailFileCmd.Flags().StringVar(&flagRegistryDBDir, "file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
 }
