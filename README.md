@@ -71,6 +71,8 @@ Note: adding --log-level trace will print what lines have been parsed and stored
 
 ### Reading data
 Best way to view your data is to login to [immudb Vault](https://vault.immudb.io).
+![Vault Search](./doc/images/vault_search_screen.png)
+
 Nevertheless, reading data from immudb Vault can be done also from command line:
 
 ```bash
