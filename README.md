@@ -106,6 +106,11 @@ To start, you need to have an PostgreSQL running with pgaudit extension enabled.
 
 ![Vault Dashboard](./doc/images/vault_screen.png)
 
+### Pull postgres image
+
+```bash
+docker pull docker.io/bitnami/postgresql:15
+```
 ### jsonlog log format
 
 The example pgaudit jsonlog log line looks like:

@@ -31,6 +31,7 @@ You need to set your `VAULT_API_KEY` in [docker-compose.yml](docker-compose.yml)
 And then
 
 ```bash
+docker-compose pull
 docker-compose up
 ```
 
