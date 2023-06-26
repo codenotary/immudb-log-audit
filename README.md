@@ -146,6 +146,7 @@ uid, statement_id, substatement_id, server_timestamp, timestamp, audit_type, cla
 ### How to set up
 
 You can use [docker-compose end-to-end example](./examples/vault/pgaudit) from this repository.
+Before starting compose, configure your API key there.
 
 ```bash
 docker-compose -f examples/vault/pgaudit/docker-compose.yml up

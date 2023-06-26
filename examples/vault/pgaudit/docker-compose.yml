@@ -62,6 +62,7 @@ services:
     volumes: 
       - 'vault-log-audit_data:/data'
       - 'postgresql_logs:/logs'
+    restart: on-failure
     depends_on:
       - postgresql
       - vault-log-audit-init
