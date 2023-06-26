@@ -23,6 +23,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/codenotary/immudb-log-audit/pkg/cmd"
 	"github.com/codenotary/immudb/pkg/client"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -53,30 +54,8 @@ var rootCmd = &cobra.Command{
 	Version:           version(),
 }
 
-var usageTemplate = `Usage:{{if .Runnable}}
-{{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
-{{.CommandPath}} [command]{{end}}{{if gt (len .Aliases) 0}}
-
-Aliases:
-{{.NameAndAliases}}{{end}}{{if .HasExample}}
-
-Examples:
-{{.Example}}{{end}}{{if .HasAvailableSubCommands}}
-
-Available Commands:{{range .Commands}}{{if (or .IsAvailableCommand (eq .Name "help"))}}
-{{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableFlags}}
-
-Flags:
-{{.Flags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
-
-Additional help topics:{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
-{{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
-
-Use "{{.CommandPath}} [command] --help" for more information about a command.{{end}}
-`
-
 func init() {
-	rootCmd.SetUsageTemplate(usageTemplate)
+	rootCmd.SetUsageTemplate(cmd.UsageTemplate)
 	rootCmd.PersistentFlags().String("immudb-host", "localhost", "immudb host")
 	rootCmd.PersistentFlags().Int("immudb-port", 3322, "immudb port")
 	rootCmd.PersistentFlags().String("immudb-database", "defaultdb", "immudb database")

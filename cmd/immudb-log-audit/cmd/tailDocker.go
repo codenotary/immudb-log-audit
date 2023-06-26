@@ -23,6 +23,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	cmdutils "github.com/codenotary/immudb-log-audit/pkg/cmd"
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
 	"github.com/codenotary/immudb-log-audit/pkg/source"
@@ -47,17 +48,17 @@ func tailDocker(cmd *cobra.Command, args []string) error {
 
 	log.WithField("args", args).Info("Docker tail")
 
-	cfg, err := immudb.NewConfigs(immuCli).Read(args[0])
+	typ, parser, err := immudb.NewConfigs(immuCli).ReadTypeParser(args[0])
 	if err != nil {
 		return fmt.Errorf("collection does not exist, please create one first, %w", err)
 	}
 
-	lp, err := newLineParser(cfg.Parser)
+	lp, err := cmdutils.NewLineParser(parser)
 	if err != nil {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
-	jsonRepository, err := newJsonRepository(cfg.Type, args[0])
+	jsonRepository, err := newJsonRepository(typ, args[0])
 	if err != nil {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}

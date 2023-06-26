@@ -18,13 +18,14 @@ package service
 
 import (
 	"fmt"
-	"io"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type lineProvider interface {
-	ReadLine() (string, error)
+	ReadLine() chan string
+	SaveState()
 }
 
 type LineParser interface {
@@ -32,7 +33,7 @@ type LineParser interface {
 }
 
 type JsonRepository interface {
-	WriteBytes(b []byte) (uint64, error)
+	WriteBytes(b [][]byte) (uint64, error)
 }
 
 type AuditHistoryEntry struct {
@@ -56,27 +57,56 @@ func NewAuditService(lineProvider lineProvider, lineParser LineParser, jsonRepos
 }
 
 func (as *AuditService) Run() error {
-	for {
-		l, err := as.lineProvider.ReadLine()
-		if err != nil {
-			if err == io.EOF {
-				log.Printf("Reached EOF")
-				return nil
+	bufferSize := 200
+	saveStateTicker := time.NewTicker(5 * time.Second)
+	buf := [][]byte{}
+
+	for stop := false; !stop; {
+		select {
+		case l, ok := <-as.lineProvider.ReadLine():
+			if !ok {
+				stop = true
+				if l == "" {
+					break
+				}
 			}
-			return err
-		}
+			b, err := as.lineParser.Parse(l)
+			if err != nil {
+				log.WithError(err).WithField("line", l).Debug("Invalid line format, skipping")
+				if !stop {
+					continue
+				}
+			}
 
-		b, err := as.lineParser.Parse(l)
-		if err != nil {
-			log.WithError(err).WithField("line", l).Debug("Invalid line format, skipping")
-			continue
-		}
+			buf = append(buf, b)
+			if len(buf) == bufferSize || (len(buf) > 0 && stop) {
+				id, err := as.jsonRepository.WriteBytes(buf)
+				if err != nil {
+					return fmt.Errorf("could not store audit entry, %w", err)
+				}
 
-		id, err := as.jsonRepository.WriteBytes(b)
-		if err != nil {
-			return fmt.Errorf("could not store audit entry, %w", err)
-		}
+				log.WithField("TXID", id).WithField("line", string(buf[len(buf)-1])).Trace("Stored line")
+				buf = [][]byte{}
 
-		log.WithField("TXID", id).WithField("line", l).Trace("Stored line")
+				if stop {
+					as.lineProvider.SaveState()
+				}
+			}
+		case <-saveStateTicker.C:
+			if len(buf) > 0 {
+				id, err := as.jsonRepository.WriteBytes(buf)
+				if err != nil {
+					return fmt.Errorf("could not store audit entry, %w", err)
+				}
+
+				log.WithField("TXID", id).WithField("line", string(buf[len(buf)-1])).Trace("Stored line")
+				buf = [][]byte{}
+				as.lineProvider.SaveState()
+			}
+
+			saveStateTicker = time.NewTicker(5 * time.Second)
+		}
 	}
+
+	return nil
 }

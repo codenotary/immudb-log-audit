@@ -29,6 +29,8 @@ import (
 type dockerTail struct {
 	reader  io.ReadCloser
 	scanner *bufio.Scanner
+	ctx     context.Context
+	lC      chan string
 }
 
 func NewDockerTail(ctx context.Context, container string, follow bool, since string, showStdout bool, showStderr bool) (*dockerTail, error) {
@@ -45,26 +47,45 @@ func NewDockerTail(ctx context.Context, container string, follow bool, since str
 	}
 	scanner := bufio.NewScanner(reader)
 
-	return &dockerTail{
+	dt := &dockerTail{
 		reader:  reader,
 		scanner: scanner,
-	}, nil
-}
-
-func (dt *dockerTail) ReadLine() (string, error) {
-	if dt.scanner.Scan() {
-		b := dt.scanner.Bytes()
-
-		if len(b) == 0 {
-			return "", nil
-		}
-
-		if len(b) > 8 && (b[0] == 1 || b[0] == 2) {
-			return string(b[8:]), nil
-		}
-
-		return string(b), nil
+		ctx:     ctx,
+		lC:      make(chan string),
 	}
 
-	return "", io.EOF
+	go dt.read()
+	return dt, nil
+}
+
+func (dt *dockerTail) read() {
+	for stop := false; !stop && dt.scanner.Scan(); {
+		b := dt.scanner.Bytes()
+		if len(b) == 0 {
+			continue
+		}
+
+		var s string
+		if len(b) > 8 && (b[0] == 1 || b[0] == 2) {
+			s = string(b[8:])
+		} else {
+			s = string(b)
+		}
+
+		select {
+		case dt.lC <- s:
+		case <-dt.ctx.Done():
+			stop = true
+		}
+	}
+
+	close(dt.lC)
+}
+
+func (*dockerTail) SaveState() {
+	// noop
+}
+
+func (dt *dockerTail) ReadLine() chan string {
+	return dt.lC
 }

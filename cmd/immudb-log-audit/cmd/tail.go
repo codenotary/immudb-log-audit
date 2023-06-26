@@ -19,7 +19,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/codenotary/immudb-log-audit/pkg/lineparser"
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
 	"github.com/spf13/cobra"
@@ -49,24 +48,6 @@ func tail(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
-}
-
-func newLineParser(name string) (service.LineParser, error) {
-	var lp service.LineParser
-	switch name {
-	case "":
-		lp = lineparser.NewDefaultLineParser()
-	case "pgaudit":
-		lp = lineparser.NewPGAuditLineParser()
-	case "pgauditjsonlog":
-		lp = lineparser.NewPGAuditJSONLogLineParser()
-	case "wrap":
-		lp = lineparser.NewWrapLineParser()
-	default:
-		return nil, fmt.Errorf("not supported parser: %s", flagParser)
-	}
-
-	return lp, nil
 }
 
 func newJsonRepository(rType string, collection string) (service.JsonRepository, error) {

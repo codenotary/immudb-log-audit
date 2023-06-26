@@ -47,48 +47,54 @@ type fileWatch struct {
 type fileTail struct {
 	pattern        string
 	follow         bool
+	registryDB     bool
 	registryDBFile string
+	registryMutex  sync.RWMutex
 	registry       map[string]fileWatch
 	lC             chan string
 	wg             sync.WaitGroup
 	ctx            context.Context
 }
 
-func NewFileTail(ctx context.Context, pattern string, follow bool, registryFolder string) (*fileTail, error) {
+func NewFileTail(ctx context.Context, pattern string, follow bool, registryDB bool, registryFolder string) (*fileTail, error) {
 
 	registry := map[string]fileWatch{}
 
-	registryDBFile := "registryFile.txt"
+	registryDBFile := "registry-file.txt"
 
-	if registryFolder != "" {
-		fi, err := os.Stat(registryFolder)
-		if err != nil {
-			return nil, fmt.Errorf("could not stat registry directory: %w", err)
+	if registryDB {
+		if registryFolder != "" {
+			fi, err := os.Stat(registryFolder)
+			if err != nil {
+				return nil, fmt.Errorf("could not stat registry directory: %w", err)
+			}
+
+			if !fi.IsDir() {
+				return nil, fmt.Errorf("registry folder is not a directory")
+			}
+
+			registryDBFile = path.Join(registryFolder, registryDBFile)
 		}
 
-		if !fi.IsDir() {
-			return nil, fmt.Errorf("registry folder is not a directory")
-		}
-
-		registryDBFile = path.Join(registryFolder, registryDBFile)
-	}
-
-	frBytes, err := os.ReadFile(registryDBFile)
-	if err != nil {
-		log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be read")
-	} else {
-		err = json.Unmarshal(frBytes, &registry)
+		frBytes, err := os.ReadFile(registryDBFile)
 		if err != nil {
-			log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be unmarshaled, ignoring")
+			log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be read")
 		} else {
-			log.WithField("path", registry).Debug("Using registry file")
+			err = json.Unmarshal(frBytes, &registry)
+			if err != nil {
+				log.WithError(err).WithField("path", registryDBFile).Info("registry file cannot be unmarshaled, ignoring")
+			} else {
+				log.WithField("path", registry).Debug("Using registry file")
+			}
 		}
 	}
 
 	ft := fileTail{
 		pattern:        pattern,
 		follow:         follow,
+		registryDB:     registryDB,
 		registryDBFile: registryDBFile,
+		registryMutex:  sync.RWMutex{},
 		registry:       registry,
 		lC:             make(chan string),
 		ctx:            ctx,
@@ -98,23 +104,25 @@ func NewFileTail(ctx context.Context, pattern string, follow bool, registryFolde
 	return &ft, nil
 }
 
-func (ft *fileTail) ReadLine() (string, error) {
-	l, ok := <-ft.lC
-	if !ok {
-		return l, io.EOF
-	}
-
-	return l, nil
+func (ft *fileTail) ReadLine() chan string {
+	return ft.lC
 }
 
-func (ft *fileTail) saveRegistry() {
-	frBytes, err := json.Marshal(ft.registry)
-	if err != nil {
-		log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
-	} else {
-		err = os.WriteFile(ft.registryDBFile, frBytes, 0666)
+func (ft *fileTail) SaveState() {
+	if ft.registryDB {
+		ft.registryMutex.Lock()
+		defer ft.registryMutex.Unlock()
+
+		frBytes, err := json.Marshal(ft.registry)
 		if err != nil {
-			log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
+			log.WithError(err).WithField("path", ft.registry).Error("Could not marshal file registry")
+		} else {
+			err = os.WriteFile(ft.registryDBFile, frBytes, 0666)
+			if err != nil {
+				log.WithError(err).WithField("path", ft.registryDBFile).Error("Could not write file registry")
+			}
+
+			log.WithField("path", ft.registryDBFile).Info("Saved file tail state")
 		}
 	}
 }
@@ -150,6 +158,7 @@ func (ft *fileTail) watchFiles() {
 								}
 
 								ft.lC <- l.Text
+								ft.registryMutex.RLock()
 								if fw.Fm.Offset > l.SeekInfo.Offset {
 									log.WithField("file", fw.t.Filename).WithField("fm_offset", fw.Fm.Offset).WithField("offset", l.SeekInfo.Offset).Debug("Detected truncation")
 									fw.Fm.Prefix = []byte{}
@@ -163,13 +172,12 @@ func (ft *fileTail) watchFiles() {
 									fw.Fm.Prefix = append(fw.Fm.Prefix, []byte("\n")...)
 									fw.Fm.PrefixLength += len(l.Text) + 1
 								}
+								ft.registryMutex.RUnlock()
 							}
 						}
 					}()
 				}
 			}
-
-			ft.saveRegistry()
 
 			if !ft.follow {
 				break
@@ -184,7 +192,6 @@ func (ft *fileTail) watchFiles() {
 
 		ft.wg.Wait()
 		close(ft.lC)
-		ft.saveRegistry()
 	}()
 }
 
@@ -198,6 +205,10 @@ func (ft *fileTail) listFiles() ([]fileWatch, error) {
 	newFiles := []fileWatch{}
 
 	log.WithField("files", matches).Debug("Matching files")
+
+	ft.registryMutex.Lock()
+	defer ft.registryMutex.Unlock()
+
 nextFile:
 	for _, m := range matches {
 		fi, err := os.Stat(m)

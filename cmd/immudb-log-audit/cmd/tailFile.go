@@ -23,10 +23,16 @@ import (
 	"os/signal"
 	"syscall"
 
+	cmdutils "github.com/codenotary/immudb-log-audit/pkg/cmd"
 	"github.com/codenotary/immudb-log-audit/pkg/repository/immudb"
 	"github.com/codenotary/immudb-log-audit/pkg/service"
 	"github.com/codenotary/immudb-log-audit/pkg/source"
 	"github.com/spf13/cobra"
+)
+
+var (
+	flagRegistryEnabled bool
+	flagRegistryDBDir   string
 )
 
 var tailFileCmd = &cobra.Command{
@@ -44,17 +50,17 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	cfg, err := immudb.NewConfigs(immuCli).Read(args[0])
+	typ, parser, err := immudb.NewConfigs(immuCli).ReadTypeParser(args[0])
 	if err != nil {
 		return fmt.Errorf("collection does not exist, please create one first, %w", err)
 	}
 
-	lp, err := newLineParser(cfg.Parser)
+	lp, err := cmdutils.NewLineParser(parser)
 	if err != nil {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
 
-	jsonRepository, err := newJsonRepository(cfg.Type, args[0])
+	jsonRepository, err := newJsonRepository(typ, args[0])
 	if err != nil {
 		return fmt.Errorf("collection configuration is corrupted, %w", err)
 	}
@@ -68,9 +74,7 @@ func tailFile(cmd *cobra.Command, args []string) error {
 		cancel()
 	}()
 
-	flagregistryDBDir, _ := cmd.Flags().GetString("file-registry-dir")
-
-	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagregistryDBDir)
+	fileTail, err := source.NewFileTail(ctx, args[1], flagFollow, flagRegistryEnabled, flagRegistryDBDir)
 	if err != nil {
 		return fmt.Errorf("invalid source: %w", err)
 	}
@@ -85,5 +89,6 @@ func tailFile(cmd *cobra.Command, args []string) error {
 
 func init() {
 	tailCmd.AddCommand(tailFileCmd)
-	tailFileCmd.Flags().String("file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
+	tailFileCmd.Flags().BoolVar(&flagRegistryEnabled, "file-registry-enabled", true, "Enable monitoring of read files")
+	tailFileCmd.Flags().StringVar(&flagRegistryDBDir, "file-registry-dir", "", "Directory where registry of monitored files should be stored, default is current directory")
 }

@@ -15,7 +15,7 @@
 version: '2'
 
 services:
-  # Peeded to set up proper permissions for non root user in bitnami/postgresql
+  # Needed to set up proper permissions for non root user in bitnami/postgresql
   volume-init:
     image: alpine
     volumes: 
@@ -42,33 +42,30 @@ services:
     depends_on:
       - volume-init
 
-  immudb:
-    image: codenotary/immudb
-    ports:
-      - '3322:3322'
-      - '8080:8080'
-    volumes:
-      - 'immudb_data:/var/lib/immudb'
-
-  # Create colleciton in immudb
-  immudb-log-audit-init:
-    image: codenotary/immudb-log-audit
-    command: create kv pgaudit --parser pgauditjsonlog --log-level trace --immudb-host immudb
+  # Create colleciton in Vault
+  vault-log-audit-init:
+    image: codenotary/vault-log-audit
+    command: create default --parser pgauditjsonlog --log-level debug 
+    environment:
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
     depends_on:
       - postgresql
-      - immudb
 
-  # Send audit logs to immudb
-  immudb-log-audit:
-    image: codenotary/immudb-log-audit
-    command: tail file pgaudit "/logs/*" --follow --file-registry-dir=/data --log-level trace --immudb-host immudb
+  # Send audit logs to Vault
+  vault-log-audit:
+    image: codenotary/vault-log-audit
+    command: tail file --parser pgauditjsonlog "/logs/*" --follow --file-registry-dir=/data --log-level debug
+    environment:
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
     volumes: 
-      - 'immudb-log-audit_data:/data'
+      - 'vault-log-audit_data:/data'
       - 'postgresql_logs:/logs'
+    restart: on-failure
     depends_on:
       - postgresql
-      - immudb
-      - immudb-log-audit-init
+      - vault-log-audit-init
 
 
 volumes:
@@ -78,10 +75,7 @@ volumes:
   # Permanent storage for posgresql logs
   postgresql_logs:
     driver: local
-  # Permanent storage for immudb database
-  immudb_data:
-    driver: local
-  # Permanent storage for immudb-log-audit. Used for tracking already monitored files. 
-  immudb-log-audit_data:
+  # Permanent storage for vault-log-audit. Used for tracking already monitored files. 
+  vault-log-audit_data:
     driver: local
 
