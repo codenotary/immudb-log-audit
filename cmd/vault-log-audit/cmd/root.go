@@ -68,7 +68,7 @@ func init() {
 	})
 
 	rootCmd.SetUsageTemplate(cmd.UsageTemplate)
-	rootCmd.PersistentFlags().String("vault-address", "https://vault.immudb.io", "vault address, can be set with VAULT_ADDRESS env var")
+	rootCmd.PersistentFlags().String("vault-address", "https://vault.immudb.io/", "vault address, can be set with VAULT_ADDRESS env var")
 	rootCmd.PersistentFlags().String("vault-api-key", "", "Vault api key, can be set with VAULT_API_KEY env var")
 	rootCmd.PersistentFlags().StringVar(&ledger, "ledger", "default", "Ledger to be used")
 	rootCmd.PersistentFlags().StringVar(&flagParser, "parser", "", "Line parser to be used. When not specified, lines will be considered as jsons. Also available 'pgaudit', 'pgauditjsonlog', 'wrap'. For those, indexes are predefined.")
@@ -90,6 +90,10 @@ func root(cmd *cobra.Command, args []string) error {
 	log.SetLevel(logLevel)
 
 	vaultAddress := viper.GetString("vault-address")
+	if vaultAddress == "" {
+		vaultAddress = "https://vault.immudb.io/"
+	}
+
 	vaultAPIKey := viper.GetString("vault-api-key")
 
 	if vaultAPIKey == "" {
