@@ -47,8 +47,8 @@ services:
     image: codenotary/vault-log-audit
     command: create default --parser pgauditjsonlog --log-level debug 
     environment:
-      - VAULT_ADDRESS=https://vault-dev.immudb.io
-      - VAULT_API_KEY=default.Lqub2Oq6_k0Be53UXjMgLw.1Mb0-onrBfFgoJeLewHxumTSpxalgXwriC_uaW2C_7SIgiR3
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
     depends_on:
       - postgresql
 
@@ -57,8 +57,8 @@ services:
     image: codenotary/vault-log-audit
     command: tail file --parser pgauditjsonlog "/logs/*" --follow --file-registry-dir=/data --log-level debug
     environment:
-      - VAULT_ADDRESS=https://vault-dev.immudb.io
-      - VAULT_API_KEY=default.Lqub2Oq6_k0Be53UXjMgLw.1Mb0-onrBfFgoJeLewHxumTSpxalgXwriC_uaW2C_7SIgiR3
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
     volumes: 
       - 'vault-log-audit_data:/data'
       - 'postgresql_logs:/logs'

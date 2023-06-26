@@ -3,6 +3,32 @@
 This docker-compose example shows how to use vault-log-audit to collect pgaudit PostgreSQL logs.
 
 ## Running
+You need to set your `VAULT_API_KEY` in [docker-compose.yml](docker-compose.yml) file
+
+```yaml
+  # Create colleciton in Vault
+  vault-log-audit-init:
+    image: codenotary/vault-log-audit
+    command: create default --parser pgauditjsonlog --log-level debug 
+    environment:
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
+    depends_on:
+      - postgresql
+
+  # Send audit logs to Vault
+  vault-log-audit:
+    image: codenotary/vault-log-audit
+    command: tail file --parser pgauditjsonlog "/logs/*" --follow --file-registry-dir=/data --log-level debug
+    environment:
+      # Do not forget to add your API key here
+      - VAULT_API_KEY=<your API key here>
+    volumes: 
+      - 'vault-log-audit_data:/data'
+      - 'postgresql_logs:/logs'
+```
+
+And then
 
 ```bash
 docker-compose up
