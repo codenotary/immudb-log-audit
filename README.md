@@ -30,9 +30,15 @@ To build vault-log-audit binary, clone this repository and run
 make
 ```
 
-### Building docker image
+### Docker image
 
-To build vault-log-audit docker image, clone this repository and run
+The simplest way is to pull image from [docker hub](https://hub.docker.com/r/codenotary/vault-log-audit)
+
+```bash
+docker pull codenotary/vault-log-audit
+```
+
+To build vault-log-audit docker image locally, clone this repository and run
 
 ```bash
 make docker
@@ -111,6 +117,7 @@ To start, you need to have an PostgreSQL running with pgaudit extension enabled.
 ```bash
 docker pull docker.io/bitnami/postgresql:15
 ```
+
 ### jsonlog log format
 
 The example pgaudit jsonlog log line looks like:
