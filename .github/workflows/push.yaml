@@ -1,0 +1,20 @@
+name: push docker
+
+on:
+  push:
+    branches:
+      - main
+      - release/v*
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: build and push
+    runs-on: ubuntu-latest
+    steps:  
+    - uses: actions/checkout@v3
+
+    - run: |
+        docker login -u "${{ secrets.REGISTRY_USER }}" -p "${{ secrets.REGISTRY_PASS }}"
+        make docker push
